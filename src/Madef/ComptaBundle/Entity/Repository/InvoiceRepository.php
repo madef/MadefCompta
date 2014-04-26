@@ -96,14 +96,6 @@ class InvoiceRepository extends EntityRepository
                 ->setParameter('accountLineValueTaxInclude', $amountTaxInclude)
                 ->orderBy('diffAmount, i.description, i.date desc, i.id');
 
-        //->where('i.valueTaxInclude + 0.2 <= :accountLineValueTaxInclude AND i.valueTaxInclude - 0.2 >= :accountLineValueTaxInclude')
-        //->orWhere('i.valueTaxInclude - 0.2 <= :accountLineValueTaxInclude AND i.valueTaxInclude + 0.2 >= :accountLineValueTaxInclude') // Negative values
-        //->orWhere('i.valueTaxExclude + 0.2 <= :accountLineValueTaxExclude AND i.valueTaxExclude - 0.2 >= :accountLineValueTaxExclude')
-        //->orWhere('i.valueTaxExclude - 0.2 <= :accountLineValueTaxExclude AND i.valueTaxExclude + 0.2 >= :accountLineValueTaxExclude') // Negative values
-        //->orWhere('r.date >= :startDate')
-        //->andWhere('r. <> :invoiceId')
-        //->setParameter('accountLineValueTaxExclude', $accountLine->getValueTaxExclude())
-        //->setParameter('endDate', $endDate->format('Y-m-d'));
         return $qb->setMaxResults(5)->getQuery()->getResult();
     }
 

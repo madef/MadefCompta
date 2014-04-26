@@ -12,19 +12,6 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 
 class InvoiceController extends Controller
 {
-
-    public function viewAction($reservation)
-    {
-        if (!$reservation) {
-            $app->abort(404, "Page inconue");
-        }
-
-        return $app['twig']->render('@MadefInvoice/view.twig', array(
-                    'reservation' => $reservation,
-                    'section' => 'view',
-        ));
-    }
-
     /**
      *
      * @param  \Symfony\Component\HttpFoundation\Request  $request
@@ -116,6 +103,11 @@ class InvoiceController extends Controller
         )));
     }
 
+    /**
+     *
+     * @param  \Symfony\Component\HttpFoundation\Request  $request
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
     public function addAction(Request $request)
     {
         $session = $request->getSession();
@@ -145,8 +137,9 @@ class InvoiceController extends Controller
     /**
      * @ParamConverter("invoice", class="MadefComptaBundle:Invoice")
      *
-     * @param \Symfony\Component\HttpFoundation\Request $request
-     * @param \Madef\ComptaBundle\Entity\Invoice        $invoice
+     * @param  \Symfony\Component\HttpFoundation\Request  $request
+     * @param  \Madef\ComptaBundle\Entity\Invoice         $invoice
+     * @return \Symfony\Component\HttpFoundation\Response
      */
     public function downloadAction(Request $request, \Madef\ComptaBundle\Entity\Invoice $invoice)
     {
@@ -165,9 +158,10 @@ class InvoiceController extends Controller
      * @ParamConverter("startDate", options={"format": "Y-m-d"})
      * @ParamConverter("endDate", options={"format": "Y-m-d"})
      *
-     * @param \Symfony\Component\HttpFoundation\Request $request
-     * @param \DateTime                                 $startDate
-     * @param \DateTime                                 $endDate
+     * @param  \Symfony\Component\HttpFoundation\Request  $request
+     * @param  \DateTime                                  $startDate
+     * @param  \DateTime                                  $endDate
+     * @return \Symfony\Component\HttpFoundation\Response
      */
     public function downloadListAction(Request $request, \DateTime $startDate, \DateTime $endDate)
     {
@@ -210,6 +204,12 @@ class InvoiceController extends Controller
         return $response;
     }
 
+    /**
+     *
+     * @param  \Symfony\Component\HttpFoundation\Request  $request
+     * @return \Symfony\Component\HttpFoundation\Response
+     * @throws \Exception
+     */
     public function saveAction(Request $request)
     {
         $session = $request->getSession();

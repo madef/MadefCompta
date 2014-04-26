@@ -25,7 +25,11 @@ class DateValidator extends ConstraintValidator
     const PATTERN = '/^(\d{1,2})\/(\d{1,2})\/(\d{4})$/';
 
     /**
-     * {@inheritDoc}
+     *
+     * @param  type                                    $value
+     * @param  \Symfony\Component\Validator\Constraint $constraint
+     * @return type
+     * @throws UnexpectedTypeException
      */
     public function validate($value, Constraint $constraint)
     {
