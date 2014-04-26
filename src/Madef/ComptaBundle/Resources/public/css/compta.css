@@ -1,0 +1,31 @@
+body {
+    padding-top: 60px;
+}
+.table th.text-right, .table td.text-right {
+    text-align: right;
+}
+.table tr.resume td, .table tr.resume th, .table-striped tbody > tr.resume:nth-child(odd) > td, .table-striped tbody > tr.resume:nth-child(odd) > th {
+    background-color: #F9F9F9;
+}
+.table thead th {
+    background-color: #F9F9F9;
+}
+.table th.price-field, .table th.date-field {
+    text-align: center;
+}
+.table .price-field {
+    width: 90px;
+}
+.table .action-field {
+    width: 10px;
+    text-align: center;
+}
+.table-acount-line .action-field {
+    width: 60px;
+}
+.table .negative {
+    font-weight: bold;
+}
+.table .date-field {
+    width: 100px;
+}

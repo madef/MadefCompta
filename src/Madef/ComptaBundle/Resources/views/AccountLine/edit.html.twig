@@ -1,0 +1,98 @@
+{% extends "MadefComptaBundle:Layout:default.html.twig" %}
+{% block title %}Edition d'une ligne de compte{% endblock %}
+{% block content %}
+<h1>
+        {% block formTitle %}
+        Édition du la ligne de compte {{ accountLine.getDescription() }} du {{ accountLine.getDate("j M. Y") }}
+        {% endblock %}
+    </h1>
+    {% if hasErrors %}
+    <div class="alert alert-error">
+        Le formulaire comporte des erreurs.
+    </div>
+    {% endif %}
+
+    <form class="form-horizontal" method="post" action="{{ url('madef_compta_accountline_save') }}">
+        <input type="hidden" name="id" value="{{ accountLine.getId() }}">
+        <div class="control-group {% if 'description' in errors|keys  %}error{% endif %}">
+            <label class="control-label" for="customerName">Description</label>
+            <div class="controls">
+                <input type="text" id="description" name="description" value="{{ accountLine.getDescription() }}">
+                {% if 'description' in errors|keys  %}<span class="help-inline">{{ errors.description }}</span>{% endif %}
+            </div>
+        </div>
+        <div class="control-group {% if 'date' in errors|keys  %}error{% endif %}">
+            <label class="control-label" for="email">Date</label>
+            <div class="controls">
+                <input type="date" id="date" name="date" value="{{ accountLine.getDate("Y-m-d") }}">
+                {% if 'date' in errors|keys  %}<span class="help-inline">{{ errors.date }}</span>{% endif %}
+            </div>
+        </div>
+        <div class="control-group">
+            <label class="control-label" for="valueTaxExclude">Valeur hors tax</label>
+            <div class="controls">
+                <input type="text" id="valueTaxExclude" name="valueTaxExclude" value="{{ accountLine.getValueTaxExclude() }}">
+            </div>
+        </div>
+        <div class="control-group">
+            <label class="control-label" for="taxRate">Taux de TVA</label>
+            <div class="controls">
+                <input type="text" id="taxRate" name="taxRate" value="{{ accountLine.getTaxRate() }}">
+            </div>
+        </div>
+        <div class="control-group">
+            <label class="control-label" for="taxValue">TVA</label>
+            <div class="controls">
+                <input type="text" id="taxValue" name="taxValue" value="{{ accountLine.getTaxValue() }}">
+            </div>
+        </div>
+        <div class="control-group">
+            <label class="control-label" for="valueTaxExclude">Valeur TTC</label>
+            <div class="controls">
+                <input type="text" id="valueTaxInclude" name="valueTaxInclude" value="{{ accountLine.getValueTaxInclude() }}">
+            </div>
+        </div>
+        <div class="control-group {% if 'flowDirection' in errors|keys  %}error{% endif %}">
+            <label class="control-label" for="flowDirection">Sens du flux</label>
+            <div class="controls">
+                <label class="radio inline">
+                    <input type="radio" name="flowDirection" id="flowDirection_in" value="{{ constant('Madef\\ComptaBundle\\Entity\\AccountLine::FLOW_DIRECTION_IN') }}" {% if accountLine.isIn() %}checked{% endif %}>
+                    Entrant
+                </label>
+                <label class="radio inline">
+                    <input type="radio" name="flowDirection" id="flowDirection_out" value="{{ constant('Madef\\ComptaBundle\\Entity\\AccountLine::FLOW_DIRECTION_OUT') }}" {% if accountLine.isOut() %}checked{% endif %}>
+                    Sortant
+                </label>
+                {% if 'flowDirection' in errors|keys  %}<div class="radio inline"><span class="help-inline">{{ errors.flowDirection }}</span></div>{% endif %}
+            </div>
+        </div>
+        <div class="control-group">
+            <label class="control-label" for="type">Type</label>
+            <div class="controls">
+                <input data-provide="typeahead" type="text" autocomplete="off" id="type" name="type" value="{{ accountLine.getType() }}" data-source="{{ typeList }}">
+            </div>
+        </div>
+        <div class="control-group">
+            <label class="control-label" for="invoiceId">Facture</label>
+            <div class="controls">
+                <input type="hidden" id="invoiceId" name="invoiceId" value="{% if accountLine.getInvoice() %}{{ accountLine.getInvoice.getId() }}{% endif %}">
+                <input
+                    type="text"
+                    id="invoiceSearch"
+                    autocomplete="off"
+                    value="{% if accountLine.getInvoice() %}{{ accountLine.getInvoice.getId() }} - {{ accountLine.getInvoice().getValueTaxInclude()|number_format(2, ',', '\'') }} € - {{ accountLine.getInvoice().getDescription() }} du {{ accountLine.getInvoice().getDate().format('j M. Y') }}{% endif %}"
+                    data-url="{{ url('madef_compta_accountline_linkedinvoice') }}"
+                    >
+            </div>
+        </div>
+        <div class="control-group">
+            <div class="controls">
+                <button type="submit" class="btn btn-primary">Enregistrer</button>
+                {% if section == 'edit' %}
+                <button type="submit" name="remove" value="1" class="btn btn-danger" onclick="return confirm('Êtes vous certain de vouloir supprimer cette ligne de compte ?')">Supprimer</button>
+                {% endif %}
+            </div>
+        </div>
+    </form>
+
+{% endblock %}

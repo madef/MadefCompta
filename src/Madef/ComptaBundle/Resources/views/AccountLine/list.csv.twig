@@ -1,0 +1,7 @@
+"Description","Date","Taux de TVA","TVA","HT","TTC"
+"Solde de la pèriode précédante",,,"{{ soldeTaxValue|number_format(2, ',', '') }}","{{ soldeTaxExclude|number_format(2, ',', '') }}","{{ soldeTaxInclude|number_format(2, ',', '') }}"
+{% for accountLine in accountLineCollection %}
+"{{ accountLine.getDescription() }}","{{ accountLine.getDate("j/m/Y") }}","{{ accountLine.getTaxRate()|number_format(2, ',', '') }}","{{ accountLine.getTaxValue()|number_format(2, ',', '') }}","{{ accountLine.getValueTaxExclude()|number_format(2, ',', '') }}","{{ accountLine.getValueTaxInclude()|number_format(2, ',', '') }}"
+{% endfor %}
+"Total",,,"{{ totalTaxValue|number_format(2, ',', '') }}","{{ totalTaxExclude|number_format(2, ',', '') }}","{{ totalTaxInclude|number_format(2, ',', '') }}"
+"Résumé de la période",,,"{{ rangeTaxValue|number_format(2, ',', '') }}","{{ rangeTaxExclude|number_format(2, ',', '') }}","{{ rangeTaxInclude|number_format(2, ',', '') }}"

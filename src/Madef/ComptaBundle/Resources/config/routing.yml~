@@ -1,0 +1,21 @@
+madef_compta_homepage:
+    pattern:  /hello/{name}
+    defaults: { _controller: MadefComptaBundle:Default:index }
+madef_compta_invoice_list:
+    pattern:  /account/
+    defaults: { _controller: MadefComptaBundle:AccountLine:list }
+madef_compta_invoice_add:
+    pattern:  /account/add
+    defaults: { _controller: MadefComptaBundle:AccountLine:add }}
+madef_compta_invoice_save:
+    pattern:  /account/save
+    defaults: { _controller: MadefComptaBundle:AccountLine:save }
+madef_compta_accountline_list:
+    pattern:  /invoice/
+    defaults: { _controller: MadefComptaBundle:Invoice:list }
+madef_compta_accountline_add:
+    pattern:  /invoice/add
+    defaults: { _controller: MadefComptaBundle:Invoice:add }
+madef_compta_invoice_save:
+    pattern:  /invoice/save
+    defaults: { _controller: MadefComptaBundle:Invoice:save }

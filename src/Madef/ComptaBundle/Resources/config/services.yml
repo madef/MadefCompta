@@ -1,0 +1,7 @@
+parameters:
+#    madef_compta.example.class: Madef\ComptaBundle\Example
+
+services:
+#    madef_compta.example:
+#        class: %madef_compta.example.class%
+#        arguments: [@service_id, "plain_value", %parameter%]
