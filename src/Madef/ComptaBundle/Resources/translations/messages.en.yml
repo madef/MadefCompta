@@ -1,0 +1,136 @@
+# App section
+app:
+    title: Accounting
+# Account section
+account:
+    modified: The account line has been modified.
+    page:
+        add:
+            title: Add an account line
+            form:
+                title: Add an account line
+        edit:
+            title: Editing an account line
+            form:
+                confirm:
+                    remove: Are you sure you want to delete this account line?
+                fieldValue:
+                    in: Income
+                    out: Outcome
+                hasErrors: There are some errors.
+                label:
+                    date: Date
+                    description: Description
+                    flowDirection: Direction of the flow
+                    invoice: Invoice
+                    remove: Remove
+                    save: Save
+                    taxRate: Tax rate
+                    taxValue: Tax value
+                    type: Type
+                    valueTaxExclude: Value te
+                    valueTaxInclude: Value ti
+                title: Editing of theaccount line %desc% of %date%
+        list:
+            form:
+                label:
+                    filter: 'Filter:'
+                    flowDirection: Direction
+                    type: Type
+            table:
+                column:
+                    title:
+                        date: Date
+                        description: Description
+                        invoice: Invoice
+                        taxRate: Tax rate
+                        taxValue: Tax
+                        valueTaxExclude: TE
+                        valueTaxInclude: TI
+                line:
+                    title:
+                        noLines: No recording during this period.
+                        previousBalance: Balance of the previous period
+                        summary: Summary of the period
+                        total: Total
+            title: Account movements between %startDate% and %endDate%
+        listCsv:
+            column:
+                title:
+                    date: Date
+                    description: Description
+                    taxRate: Tax rate
+                    taxValue: Tax value
+                    valueTaxExclude: Value te
+                    valueTaxInclude: Value ti
+            line:
+                title:
+                    previousBalance: Balance of the previous period
+                    summary: Summary of the period
+                    total: Total
+    removed: Account line removed.
+    saved: Account line saved.
+    title: Account line
+# Date section
+date:
+    incorrectFormat: The date format is incorrect.
+    required: The date is required.
+# File section
+file:
+    unavailableFormat: Unsupported file format.
+# Flow direction section
+flowdirection:
+    required: The flow is required.
+# Invoice section
+invoice:
+    modified: Invoice modified.
+    page:
+        add:
+            title: Add invoice
+            form:
+                title: Add invoice
+        edit:
+            title: Editiing invoice
+            form:
+                confirm:
+                    remove: Are you sure you want to delete this invoice?
+                fieldValue:
+                    in: Emitted
+                    out: Received
+                hasErrors: The form has errors.
+                label:
+                    date: Date
+                    description: Description
+                    file: File
+                    flowDirection: Direction of the flow
+                    remove: Remove
+                    save: Save
+                    taxRate: Tax rate
+                    taxValue: Tax value
+                    type: Type
+                    valueTaxExclude: Value TE
+                    valueTaxInclude: Value TI
+                title: Editing invoice %desc% of %date%
+        list:
+            form:
+                label:
+                    filter: 'Filter:'
+                    flowDirection: Direction
+                    type: Type
+            table:
+                column:
+                    title:
+                        date: Date
+                        description: Description
+                        taxRate: Tax rate
+                        taxValue: Tax value
+                        valueTaxExclude: TE
+                        valueTaxInclude: TI
+                line:
+                    title:
+                        noLines: No recording during this period.
+                        total: Total
+            title: Invoices between %startDate% and %endDate%
+    removed: Invoice removed.
+    saved: Invoice saved.
+    title: Invoices

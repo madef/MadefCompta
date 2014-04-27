@@ -1,33 +1,36 @@
-madef_compta_accountline_list:
+madef_compta_language_router:
     pattern:  /
+    defaults: { _controller: MadefComptaBundle:Language:route }
+madef_compta_accountline_list:
+    pattern:  /{_locale}/
     defaults: { _controller: MadefComptaBundle:AccountLine:list }
 madef_compta_accountline_linkedinvoice:
-    pattern:  /account/getLinkedInvoiceList
+    pattern:  /{_locale}/account/getLinkedInvoiceList
     defaults: { _controller: MadefComptaBundle:AccountLine:getLinkedInvoiceList }
 madef_compta_accountline_add:
-    pattern:  /account/add
+    pattern:  /{_locale}/account/add
     defaults: { _controller: MadefComptaBundle:AccountLine:add }
 madef_compta_accountline_edit:
-    pattern:  /account/edit/{accountLine}
+    pattern:  /{_locale}/account/edit/{accountLine}
     defaults: { _controller: MadefComptaBundle:AccountLine:edit }
 madef_compta_accountline_save:
-    pattern:  /account/save
+    pattern:  /{_locale}/account/save
     defaults: { _controller: MadefComptaBundle:AccountLine:save }
 madef_compta_invoice_list:
-    pattern: /invoice
+    pattern: /{_locale}/invoice
     defaults: { _controller: MadefComptaBundle:Invoice:list }
 madef_compta_invoice_add:
-    pattern:  /invoice/add
+    pattern:  /{_locale}/invoice/add
     defaults: { _controller: MadefComptaBundle:Invoice:add }
 madef_compta_invoice_edit:
-    pattern:  /invoice/edit/{invoice}
+    pattern:  /{_locale}/invoice/edit/{invoice}
     defaults: { _controller: MadefComptaBundle:Invoice:edit }
 madef_compta_invoice_save:
-    pattern:  /invoice/save
+    pattern:  /{_locale}/invoice/save
     defaults: { _controller: MadefComptaBundle:Invoice:save }
 madef_compta_invoice_download:
-    pattern:  /invoice/download/{invoice}
+    pattern:  /{_locale}/invoice/download/{invoice}
     defaults: { _controller: MadefComptaBundle:Invoice:download }
 madef_compta_invoice_downloadlist:
-    pattern:  /invoice/downloadList/{startDate}/{endDate}
+    pattern:  /{_locale}/invoice/downloadList/{startDate}/{endDate}
     defaults: { _controller: MadefComptaBundle:Invoice:downloadList }

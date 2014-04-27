@@ -216,7 +216,7 @@ class AccountLineController extends Controller
                 $accountLine->setInvoice(null);
                 $em->remove($accountLine);
                 $em->flush();
-                $session->getFlashBag()->set('successMessage', 'Ligne de compte supprimée.');
+                $session->getFlashBag()->set('successMessage', $this->get('translator')->trans('account.removed'));
 
                 return $this->redirect($this->generateUrl('madef_compta_accountline_list'));
             }
@@ -232,7 +232,7 @@ class AccountLineController extends Controller
         $accountLine->setType($request->get('type'));
 
         if (is_null($request->get('flowDirection')) || !in_array($request->get('flowDirection'), array(\Madef\ComptaBundle\Entity\AccountLine::FLOW_DIRECTION_IN, \Madef\ComptaBundle\Entity\AccountLine::FLOW_DIRECTION_OUT))) {
-            $errors['flowDirection'] = 'Le sens du flux est obligatoire';
+            $errors['flowDirection'] = $this->get('translator')->trans('flowdirection.required');
         } else {
             $accountLine->setFlowDirection($request->get('flowDirection'));
         }
@@ -244,7 +244,7 @@ class AccountLineController extends Controller
         }
 
         if (!$request->get('date')) {
-            $errors['date'] = 'Le date est obligatoire';
+            $errors['date'] = $this->get('translator')->trans('date.required');
         } else {
             try {
                 $date = \DateTime::createFromFormat('Y-m-d', $request->get('date'));
@@ -253,7 +253,7 @@ class AccountLineController extends Controller
                 }
                 $accountLine->setDate($date);
             } catch (\Exception $e) {
-                $errors['date'] = 'Le format de la date est incorrect';
+                $errors['date'] = $this->get('translator')->trans('date.incorrectFormat');
             }
         }
 
@@ -261,9 +261,9 @@ class AccountLineController extends Controller
             $em->persist($accountLine);
             $em->flush();
             if ($id) {
-                $session->getFlashBag()->set('successMessage', 'Ligne de compte modifiée.');
+                $session->getFlashBag()->set('successMessage', $this->get('translator')->trans('account.modified'));
             } else {
-                $session->getFlashBag()->set('successMessage', 'Ligne de compte enregistrée.');
+                $session->getFlashBag()->set('successMessage', $this->get('translator')->trans('account.saved'));
             }
 
             return $this->redirect($this->generateUrl('madef_compta_accountline_list'));

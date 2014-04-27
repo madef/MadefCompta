@@ -1,0 +1,136 @@
+# App section
+app:
+    title: Comptabilité
+# Account section
+account:
+    modified: Ligne de compte modifiée.
+    page:
+        add:
+            title: Ajout d'une ligne de compte
+            form:
+                title: Ajout d'une ligne de compte
+        edit:
+            title: Edition d'une ligne de compte
+            form:
+                confirm:
+                    remove: Êtes vous certain de vouloir supprimer cette ligne de compte ?
+                fieldValue:
+                    in: Entrant
+                    out: Sortant
+                hasErrors: Le formulaire comporte des erreurs.
+                label:
+                    date: Date
+                    description: Description
+                    flowDirection: Sens du flux
+                    invoice: Facture
+                    remove: Supprimer
+                    save: Enregistrer
+                    taxRate: Taux de TVA
+                    taxValue: TVA
+                    type: Type
+                    valueTaxExclude: Valeur hors tax
+                    valueTaxInclude: Valeur TTC
+                title: Édition du la ligne de compte %desc% du %date%
+        list:
+            form:
+                label:
+                    filter: 'Filtrer :'
+                    flowDirection: Sens
+                    type: Type
+            table:
+                column:
+                    title:
+                        date: Date
+                        description: Description
+                        invoice: Facture
+                        taxRate: Taux de TVA
+                        taxValue: TVA
+                        valueTaxExclude: HT
+                        valueTaxInclude: TTC
+                line:
+                    title:
+                        noLines: Pas d'enregistrement sur cette période.
+                        previousBalance: Solde de la pèriode précédente
+                        summary: Résumé de la période
+                        total: Total
+            title: Mouvements de compte entre le %startDate% et le %endDate%
+        listCsv:
+            column:
+                title:
+                    date: Date
+                    description: Description
+                    taxRate: Taux de TVA
+                    taxValue: TVA
+                    valueTaxExclude: HT
+                    valueTaxInclude: TTC
+            line:
+                title:
+                    previousBalance: Solde de la pèriode précédante
+                    summary: Résumé de la période
+                    total: Total
+    removed: Ligne de compte supprimée.
+    saved: Ligne de compte enregistrée.
+    title: Lignes de compte
+# Date section
+date:
+    incorrectFormat: Le format de la date est incorrect.
+    required: La date est requis.
+# File section
+file:
+    unavailableFormat: Format de fichier non supporté.
+# Flow direction section
+flowdirection:
+    required: Le sens du flux est requis.
+# Invoice section
+invoice:
+    modified: Facture modifiée.
+    page:
+        add:
+            title: Ajout d'une facture
+            form:
+                title: Ajout d'une facture
+        edit:
+            title: Edition d'une facture
+            form:
+                confirm:
+                    remove: Êtes vous certain de vouloir supprimer cette facture ?
+                fieldValue:
+                    in: Émise
+                    out: Reçue
+                hasErrors: Le formulaire comporte des erreurs.
+                label:
+                    date: Date
+                    description: Description
+                    file: Fichier
+                    flowDirection: Sens du flux
+                    remove: Supprimer
+                    save: Enregistrer
+                    taxRate: Taux de TVA
+                    taxValue: TVA
+                    type: Type
+                    valueTaxExclude: Valeur hors tax
+                    valueTaxInclude: Valeur TTC
+                title: Édition de la facture %desc% du %date%
+        list:
+            form:
+                label:
+                    filter: 'Filtrer :'
+                    flowDirection: Sens
+                    type: Type
+            table:
+                column:
+                    title:
+                        date: Date
+                        description: Description
+                        taxRate: Taux de TVA
+                        taxValue: TVA
+                        valueTaxExclude: HT
+                        valueTaxInclude: TTC
+                line:
+                    title:
+                        noLines: Pas d'enregistrement sur cette période.
+                        total: Total
+            title: Factures entre le %startDate% et le %endDate%
+    removed: Facture supprimée.
+    saved: Facture enregistrée.
+    title: Factures

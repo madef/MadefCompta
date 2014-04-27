@@ -248,7 +248,7 @@ class InvoiceController extends Controller
             if ($request->get('remove')) {
                 $em->remove($invoice);
                 $em->flush();
-                $session->getFlashBag()->set('successMessage', 'Facture supprimée.');
+                $session->getFlashBag()->set('successMessage', $this->get('translator')->trans('invoice.removed'));
 
                 return $this->redirect($this->generateUrl('madef_compta_invoice_list'));
             }
@@ -263,7 +263,7 @@ class InvoiceController extends Controller
         $invoice->setValueTaxExclude($request->get('valueTaxExclude'));
 
         if (is_null($request->get('flowDirection')) || !in_array($request->get('flowDirection'), array(\Madef\ComptaBundle\Entity\Invoice::FLOW_DIRECTION_IN, \Madef\ComptaBundle\Entity\Invoice::FLOW_DIRECTION_OUT))) {
-            $errors['flowDirection'] = 'Le sens du flux est obligatoire';
+            $errors['flowDirection'] = $this->get('translator')->trans('flowdirection.required');
         } else {
             $invoice->setFlowDirection($request->get('flowDirection'));
         }
@@ -274,7 +274,7 @@ class InvoiceController extends Controller
             $filename = md5($_FILES['file']['name'] . rand(1, 1000000));
 
             if (!preg_match('/\.(pdf|png|jpg|jpeg|gif|zip|tgz|tbz2|gz|bz2|ods|odt|csv|doc|docx)$/Usi', $_FILES['file']['name'])) {
-                $errors['file'] = 'Format de fichier non supporté';
+                $errors['file'] = $this->get('translator')->trans('file.unavailableFormat');
             } else {
                 $directory = realpath(__DIR__ . '/../Resources/download/invoice');
                 move_uploaded_file($_FILES['file']['tmp_name'], $directory . '/' . $filename);
@@ -284,7 +284,7 @@ class InvoiceController extends Controller
         }
 
         if (!$request->get('date')) {
-            $errors['date'] = 'Le date est obligatoire';
+            $errors['date'] = $this->get('translator')->trans('date.required');
         } else {
             try {
                 $date = \DateTime::createFromFormat('Y-m-d', $request->get('date'));
@@ -293,7 +293,7 @@ class InvoiceController extends Controller
                 }
                 $invoice->setDate($date);
             } catch (\Exception $e) {
-                $errors['date'] = 'Le format de la date est incorrect';
+                $errors['date'] = $this->get('translator')->trans('date.incorrectFormat');
             }
         }
 
@@ -302,9 +302,9 @@ class InvoiceController extends Controller
             $em->flush();
 
             if ($id) {
-                $session->getFlashBag()->set('successMessage', 'Facture modifiée.');
+                $session->getFlashBag()->set('successMessage', $this->get('translator')->trans('invoice.modified'));
             } else {
-                $session->getFlashBag()->set('successMessage', 'Facture enregistrée.');
+                $session->getFlashBag()->set('successMessage', $this->get('translator')->trans('invoice.saved'));
             }
 
             return $this->redirect($this->generateUrl('madef_compta_invoice_list'));

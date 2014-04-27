@@ -1,79 +1,79 @@
 {% extends "MadefComptaBundle:Layout:default.html.twig" %}
-{% block title %}Edition d'une facture{% endblock %}
+{% block title %}{% trans %}invoice.page.edit.title{% endtrans %}{% endblock %}
 {% block content %}
-<h1>
-		{% block formTitle %}
-        Édition de la facture {{ invoice.getDescription() }} du {{ invoice.getDate("j M. Y") }}
-		{% endblock %}
+    <h1>
+        {% block formTitle %}
+            {% trans with {'%desc%': invoice.getDescription(), '%date%': invoice.getDate("j M. Y")} %}invoice.page.edit.form.title{% endtrans %}
+        {% endblock %}
     </h1>
-	{% if hasErrors %}
-    <div class="alert alert-error">
-        Le formulaire comporte des erreurs.
-    </div>
-	{% endif %}
+    {% if hasErrors %}
+        <div class="alert alert-error">
+            {% trans %}invoice.page.edit.form.hasErrors{% endtrans %}
+        </div>
+    {% endif %}
 
     <form class="form-horizontal" method="post" action="{{ url('madef_compta_invoice_save') }}" enctype="multipart/form-data">
         <input type="hidden" name="id" value="{{ invoice.getId() }}">
         <div class="control-group {% if 'description' in errors|keys  %}error{% endif %}">
-            <label class="control-label" for="customerName">Description</label>
+            <label class="control-label" for="customerName">{% trans %}invoice.page.edit.form.label.description{% endtrans %}</label>
             <div class="controls">
                 <input type="text" id="description" name="description" value="{{ invoice.getDescription() }}">
-				{% if 'description' in errors|keys  %}<span class="help-inline">{{ errors.description }}</span>{% endif %}
+                {% if 'description' in errors|keys  %}<span class="help-inline">{{ errors.description }}</span>{% endif %}
             </div>
         </div>
         <div class="control-group {% if 'date' in errors|keys  %}error{% endif %}">
-            <label class="control-label" for="email">Date</label>
+            <label class="control-label" for="email">{% trans %}invoice.page.edit.form.label.date{% endtrans %}</label>
             <div class="controls">
                 <input type="date" id="date" name="date" value="{{ invoice.getDate("Y-m-d") }}">
-				{% if 'date' in errors|keys  %}<span class="help-inline">{{ errors.date }}</span>{% endif %}
+                {% if 'date' in errors|keys  %}<span class="help-inline">{{ errors.date }}</span>{% endif %}
             </div>
         </div>
         <div class="control-group">
-            <label class="control-label" for="valueTaxExclude">Valeur hors tax</label>
+            <label class="control-label" for="valueTaxExclude">{% trans %}invoice.page.edit.form.label.valueTaxExclude{% endtrans %}</label>
             <div class="controls">
                 <input type="text" id="valueTaxExclude" name="valueTaxExclude" value="{{ invoice.getValueTaxExclude() }}">
             </div>
         </div>
         <div class="control-group">
-            <label class="control-label" for="taxRate">Taux de TVA</label>
+            <label class="control-label" for="taxRate">{% trans %}invoice.page.edit.form.label.taxRate{% endtrans %}</label>
             <div class="controls">
                 <input type="text" id="taxRate" name="taxRate" value="{{ invoice.getTaxRate() }}">
             </div>
         </div>
         <div class="control-group">
-            <label class="control-label" for="taxValue">TVA</label>
+            <label class="control-label" for="taxValue">{% trans %}invoice.page.edit.form.label.taxValue{% endtrans %}</label>
             <div class="controls">
                 <input type="text" id="taxValue" name="taxValue" value="{{ invoice.getTaxValue() }}">
             </div>
         </div>
         <div class="control-group">
-            <label class="control-label" for="valueTaxExclude">Valeur TTC</label>
+            <label class="control-label" for="valueTaxInclude">{% trans %}invoice.page.edit.form.label.valueTaxInclude{% endtrans %}</label>
             <div class="controls">
                 <input type="text" id="valueTaxInclude" name="valueTaxInclude" value="{{ invoice.getValueTaxInclude() }}">
             </div>
         </div>
         <div class="control-group {% if 'flowDirection' in errors|keys  %}error{% endif %}">
-            <label class="control-label" for="flowDirection">Sens du flux</label>
+            <label class="control-label" for="flowDirection">{% trans %}invoice.page.edit.form.label.flowDirection{% endtrans %}</label>
             <div class="controls">
                 <label class="radio inline">
                     <input type="radio" name="flowDirection" id="flowDirection_in" value="{{ constant('Madef\\ComptaBundle\\Entity\\Invoice::FLOW_DIRECTION_IN') }}" {% if invoice.isIn() %}checked{% endif %}>
-                    Émise
+                    {% trans %}invoice.page.edit.form.fieldValue.in{% endtrans %}
                 </label>
                 <label class="radio inline">
                     <input type="radio" name="flowDirection" id="flowDirection_out" value="{{ constant('Madef\\ComptaBundle\\Entity\\Invoice::FLOW_DIRECTION_OUT') }}" {% if invoice.isOut() %}checked{% endif %}>
-                    Reçue
+                    {% trans %}invoice.page.edit.form.fieldValue.out{% endtrans %}
                 </label>
                 {% if 'flowDirection' in errors|keys  %}<div class="radio inline"><span class="help-inline">{{ errors.flowDirection }}</span></div>{% endif %}
             </div>
         </div>
         <div class="control-group">
-            <label class="control-label" for="type">Type</label>
+            <label class="control-label" for="type">{% trans %}invoice.page.edit.form.label.type{% endtrans %}</label>
             <div class="controls">
                 <input data-provide="typeahead" type="text" autocomplete="off"id="type" name="type" value="{{ invoice.getType() }}" data-source="{{ typeList }}">
             </div>
         </div>
         <div class="control-group {% if 'file' in errors|keys  %}error{% endif %}">
-            <label class="control-label" for="file">Fichier</label>
+            <label class="control-label" for="file">{% trans %}invoice.page.edit.form.label.file{% endtrans %}</label>
             <div class="controls">
                 <input type="file" id="file" name="file">
                 {% if 'file' in errors|keys  %}<span class="help-inline">{{ errors.file }}</span>{% endif %}
@@ -83,13 +83,13 @@
             <div class="controls">
                 {% if invoice.hasFilename() %}
                     <a class="btn btn" href="{{ url('madef_compta_invoice_download', {invoice: invoice.getId()}) }}"><i class=" icon-download-alt"></i></a>
-                {% endif %}
-                        <button type="submit" class="btn btn-primary">Enregistrer</button>
+                    {% endif %}
+                <button type="submit" class="btn btn-primary">{% trans %}invoice.page.edit.form.label.save{% endtrans %}</button>
                 {% if section == 'edit' %}
-                        <button type="submit" name="remove" value="1" class="btn btn-danger" onclick="return confirm('Êtes vous certain de vouloir supprimer cette ligne de compte ?')">Supprimer</button>
+                    <button type="submit" name="remove" value="1" class="btn btn-danger" onclick="return confirm('{% trans %}invoice.page.edit.form.confirm.remove{% endtrans %}')">{% trans %}invoice.page.edit.form.label.remove{% endtrans %}</button>
                 {% endif %}
-                    </div>
-                </div>
-            </form>
+            </div>
+        </div>
+    </form>
 
 {% endblock %}

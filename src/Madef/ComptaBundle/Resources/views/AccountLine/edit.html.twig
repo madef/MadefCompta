@@ -1,79 +1,79 @@
 {% extends "MadefComptaBundle:Layout:default.html.twig" %}
-{% block title %}Edition d'une ligne de compte{% endblock %}
+{% block title %}{% trans %}account.page.edit.title{% endtrans %}{% endblock %}
 {% block content %}
-<h1>
+    <h1>
         {% block formTitle %}
-        Édition du la ligne de compte {{ accountLine.getDescription() }} du {{ accountLine.getDate("j M. Y") }}
+            {% trans with {'%desc%': accountLine.getDescription(), '%date%': accountLine.getDate("j M. Y")} %}account.page.edit.form.title{% endtrans %}
         {% endblock %}
     </h1>
     {% if hasErrors %}
-    <div class="alert alert-error">
-        Le formulaire comporte des erreurs.
-    </div>
+        <div class="alert alert-error">
+            {% trans %}account.page.edit.form.hasErrors{% endtrans %}
+        </div>
     {% endif %}
 
     <form class="form-horizontal" method="post" action="{{ url('madef_compta_accountline_save') }}">
         <input type="hidden" name="id" value="{{ accountLine.getId() }}">
         <div class="control-group {% if 'description' in errors|keys  %}error{% endif %}">
-            <label class="control-label" for="customerName">Description</label>
+            <label class="control-label" for="customerName">{% trans %}account.page.edit.form.label.description{% endtrans %}</label>
             <div class="controls">
                 <input type="text" id="description" name="description" value="{{ accountLine.getDescription() }}">
                 {% if 'description' in errors|keys  %}<span class="help-inline">{{ errors.description }}</span>{% endif %}
             </div>
         </div>
         <div class="control-group {% if 'date' in errors|keys  %}error{% endif %}">
-            <label class="control-label" for="email">Date</label>
+            <label class="control-label" for="email">{% trans %}account.page.edit.form.label.date{% endtrans %}</label>
             <div class="controls">
                 <input type="date" id="date" name="date" value="{{ accountLine.getDate("Y-m-d") }}">
                 {% if 'date' in errors|keys  %}<span class="help-inline">{{ errors.date }}</span>{% endif %}
             </div>
         </div>
         <div class="control-group">
-            <label class="control-label" for="valueTaxExclude">Valeur hors tax</label>
+            <label class="control-label" for="valueTaxExclude">{% trans %}account.page.edit.form.label.valueTaxExclude{% endtrans %}</label>
             <div class="controls">
                 <input type="text" id="valueTaxExclude" name="valueTaxExclude" value="{{ accountLine.getValueTaxExclude() }}">
             </div>
         </div>
         <div class="control-group">
-            <label class="control-label" for="taxRate">Taux de TVA</label>
+            <label class="control-label" for="taxRate">{% trans %}account.page.edit.form.label.taxRate{% endtrans %}</label>
             <div class="controls">
                 <input type="text" id="taxRate" name="taxRate" value="{{ accountLine.getTaxRate() }}">
             </div>
         </div>
         <div class="control-group">
-            <label class="control-label" for="taxValue">TVA</label>
+            <label class="control-label" for="taxValue">{% trans %}account.page.edit.form.label.taxValue{% endtrans %}</label>
             <div class="controls">
                 <input type="text" id="taxValue" name="taxValue" value="{{ accountLine.getTaxValue() }}">
             </div>
         </div>
         <div class="control-group">
-            <label class="control-label" for="valueTaxExclude">Valeur TTC</label>
+            <label class="control-label" for="valueTaxInclude">{% trans %}account.page.edit.form.label.valueTaxExclude{% endtrans %}</label>
             <div class="controls">
                 <input type="text" id="valueTaxInclude" name="valueTaxInclude" value="{{ accountLine.getValueTaxInclude() }}">
             </div>
         </div>
         <div class="control-group {% if 'flowDirection' in errors|keys  %}error{% endif %}">
-            <label class="control-label" for="flowDirection">Sens du flux</label>
+            <label class="control-label" for="flowDirection">{% trans %}account.page.edit.form.label.flowDirection{% endtrans %}</label>
             <div class="controls">
                 <label class="radio inline">
                     <input type="radio" name="flowDirection" id="flowDirection_in" value="{{ constant('Madef\\ComptaBundle\\Entity\\AccountLine::FLOW_DIRECTION_IN') }}" {% if accountLine.isIn() %}checked{% endif %}>
-                    Entrant
+                    {% trans %}account.page.edit.form.fieldValue.in{% endtrans %}
                 </label>
                 <label class="radio inline">
                     <input type="radio" name="flowDirection" id="flowDirection_out" value="{{ constant('Madef\\ComptaBundle\\Entity\\AccountLine::FLOW_DIRECTION_OUT') }}" {% if accountLine.isOut() %}checked{% endif %}>
-                    Sortant
+                    {% trans %}account.page.edit.form.fieldValue.out{% endtrans %}
                 </label>
                 {% if 'flowDirection' in errors|keys  %}<div class="radio inline"><span class="help-inline">{{ errors.flowDirection }}</span></div>{% endif %}
             </div>
         </div>
         <div class="control-group">
-            <label class="control-label" for="type">Type</label>
+            <label class="control-label" for="type">{% trans %}account.page.edit.form.label.type{% endtrans %}</label>
             <div class="controls">
                 <input data-provide="typeahead" type="text" autocomplete="off" id="type" name="type" value="{{ accountLine.getType() }}" data-source="{{ typeList }}">
             </div>
         </div>
         <div class="control-group">
-            <label class="control-label" for="invoiceId">Facture</label>
+            <label class="control-label" for="invoiceId">{% trans %}account.page.edit.form.label.invoice{% endtrans %}</label>
             <div class="controls">
                 <input type="hidden" id="invoiceId" name="invoiceId" value="{% if accountLine.getInvoice() %}{{ accountLine.getInvoice.getId() }}{% endif %}">
                 <input
@@ -87,9 +87,9 @@
         </div>
         <div class="control-group">
             <div class="controls">
-                <button type="submit" class="btn btn-primary">Enregistrer</button>
+                <button type="submit" class="btn btn-primary">{% trans %}account.page.edit.form.label.save{% endtrans %}</button>
                 {% if section == 'edit' %}
-                <button type="submit" name="remove" value="1" class="btn btn-danger" onclick="return confirm('Êtes vous certain de vouloir supprimer cette ligne de compte ?')">Supprimer</button>
+                    <button type="submit" name="remove" value="1" class="btn btn-danger" onclick="return confirm('{% trans %}account.page.edit.form.confirm.remove{% endtrans %}')">{% trans %}account.page.edit.form.label.remove{% endtrans %}</button>
                 {% endif %}
             </div>
         </div>
