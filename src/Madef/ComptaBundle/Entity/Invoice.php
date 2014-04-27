@@ -36,10 +36,6 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class Invoice
 {
-
-    const FLOW_DIRECTION_IN = 0;
-    const FLOW_DIRECTION_OUT = 1;
-
     /**
      * @ORM\Column(type="integer")
      * @ORM\Id
@@ -84,17 +80,18 @@ class Invoice
     private $description;
 
     /**
-     * @ORM\Column(type="string", nullable=true)
+     * @ORM\ManyToOne(targetEntity="Company")
+     * @ORM\JoinColumn(name="transmitter_id", referencedColumnName="id")
      * @var string
      */
     private $transmitter;
 
     /**
-     * @ORM\Column(type="string", nullable=true)
+     * @ORM\ManyToOne(targetEntity="Company")
+     * @ORM\JoinColumn(name="receiver_id", referencedColumnName="id")
      * @var string
      */
     private $receiver;
-
     /**
      * @ORM\Column(type="string", nullable=true)
      * @var string
@@ -108,16 +105,11 @@ class Invoice
     private $filetype;
 
     /**
-     * @ORM\Column(type="string", nullable=true)
+     * @ORM\ManyToOne(targetEntity="Type")
+     * @ORM\JoinColumn(name="type_id", referencedColumnName="id")
      * @var string
      */
     private $type;
-
-    /**
-     * @ORM\Column(type="boolean", nullable=false)
-     * @var bool
-     */
-    private $flowDirection;
 
     /*
      * @ORM\OneToMany(targetEntity="AccountLine", mappedBy="invoice")
@@ -305,39 +297,6 @@ class Invoice
     }
 
     /**
-     * Get transmitter
-     *
-     * @return string
-     */
-    public function getTransmitter()
-    {
-        return $this->transmitter;
-    }
-
-    /**
-     * Set transmitter
-     *
-     * @param string transmitter
-     * @return Invoice
-     */
-    public function setTransmitter($transmitter)
-    {
-        $this->transmitter = $transmitter;
-
-        return $this;
-    }
-
-    /**
-     * Get receiver
-     *
-     * @return string
-     */
-    public function getReceiver()
-    {
-        return $this->receiver;
-    }
-
-    /**
      * Set receiver
      *
      * @param string receiver
@@ -417,47 +376,6 @@ class Invoice
     }
 
     /**
-     * Get flowDirection
-     *
-     * @return bool
-     */
-    public function getFlowDirection()
-    {
-        return $this->flowDirection;
-    }
-
-    /**
-     * Set flowDirection
-     *
-     * @param bool flowDirection
-     * @return Invoice
-     */
-    public function setFlowDirection($flowDirection)
-    {
-        $this->flowDirection = $flowDirection;
-
-        return $this;
-    }
-
-    public function isIn()
-    {
-        if (is_null($this->getFlowDirection()) || $this->getFlowDirection() != self::FLOW_DIRECTION_IN) {
-            return false;
-        }
-
-        return true;
-    }
-
-    public function isOut()
-    {
-        if (is_null($this->getFlowDirection()) || $this->getFlowDirection() != self::FLOW_DIRECTION_OUT) {
-            return false;
-        }
-
-        return true;
-    }
-
-    /**
      * Get filetype
      *
      * @return string
@@ -490,4 +408,36 @@ class Invoice
         return $this->getDate('Y-m-d') . '-' . str_replace(' ', '_', $this->getDescription()) . '.' . $this->getFiletype();
     }
 
+    /**
+     * Set transmitter
+     *
+     * @param  string  $transmitter
+     * @return Invoice
+     */
+    public function setTransmitter($transmitter)
+    {
+        $this->transmitter = $transmitter;
+
+        return $this;
+    }
+
+    /**
+     * Get transmitter
+     *
+     * @return string
+     */
+    public function getTransmitter()
+    {
+        return $this->transmitter;
+    }
+
+    /**
+     * Get receiver
+     *
+     * @return string
+     */
+    public function getReceiver()
+    {
+        return $this->receiver;
+    }
 }

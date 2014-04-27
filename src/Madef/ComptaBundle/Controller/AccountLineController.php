@@ -73,22 +73,25 @@ class AccountLineController extends Controller
 
         // Get the resa list
         $accountLineCollection = $this->getDoctrine()->getRepository('MadefComptaBundle:AccountLine')
-                ->findByDate($startDate, $endDate, $request->get('type'), $request->get('flowDirection'));
+                ->findByDate($startDate, $endDate, $request->get('type'), $request->get('transmitter'), $request->get('receiver'));
 
         $solde = $this->getDoctrine()->getRepository('MadefComptaBundle:AccountLine')
-                ->getTotal($startDate, false, $request->get('type'), $request->get('flowDirection'));
+                ->getTotal($startDate, false, $request->get('type'));
         $total = $this->getDoctrine()->getRepository('MadefComptaBundle:AccountLine')
-                ->getTotal($endDate, true, $request->get('type'), $request->get('flowDirection'));
+                ->getTotal($endDate, true, $request->get('type'));
         $range = $this->getDoctrine()->getRepository('MadefComptaBundle:AccountLine')
-                ->getRangeTotal($startDate, $endDate, $request->get('type'), $request->get('flowDirection'));
+                ->getRangeTotal($startDate, $endDate, $request->get('type'));
 
         $format = '.html';
         if ($request->get('format') === 'csv') {
             $format = '.csv';
         }
 
-        $typeList = $this->getDoctrine()->getRepository('MadefComptaBundle:AccountLine')
-                ->getTypeList();
+        $typeList = $this->getDoctrine()->getRepository('MadefComptaBundle:Type')
+                ->getList();
+
+        $companyList = $this->getDoctrine()->getRepository('MadefComptaBundle:Company')
+                ->getList();
 
         $return = $this->renderView('MadefComptaBundle:AccountLine:list' . $format . '.twig', array(
                     'startDate' => $startDate->format('j M. Y'),
@@ -112,8 +115,9 @@ class AccountLineController extends Controller
                     'successMessage' => $session->getFlashBag()->get('successMessage'),
                     'typeList' => $typeList,
                     'currentType' => $request->get('type'),
-                    'flowDirectionList' => array('in' => 'Crédit', 'out' => 'Débit'),
-                    'currentFlowDirection' => $request->get('flowDirection'),
+                    'companyList' => $companyList,
+                    'currentTransmitter' => $request->get('transmitter'),
+                    'currentReceiver' => $request->get('receiver'),
         ));
 
         $response = new Response($return);
@@ -154,8 +158,11 @@ class AccountLineController extends Controller
             $session->remove('errors');
         }
 
-        $typeList = $this->getDoctrine()->getRepository('MadefComptaBundle:AccountLine')
-                ->getTypeList();
+        $typeList = $this->getDoctrine()->getRepository('MadefComptaBundle:Type')
+                ->getList();
+
+        $companyList = $this->getDoctrine()->getRepository('MadefComptaBundle:Company')
+                ->getList();
 
         return new Response($this->renderView('MadefComptaBundle:AccountLine:edit.html.twig', array(
                     'section' => 'edit',
@@ -163,6 +170,7 @@ class AccountLineController extends Controller
                     'errors' => $errors,
                     'hasErrors' => (bool) count($errors),
                     'typeList' => json_encode($typeList),
+                    'companyList' => json_encode($companyList),
         )));
     }
 
@@ -185,8 +193,11 @@ class AccountLineController extends Controller
             $session->remove('errors');
         }
 
-        $typeList = $this->getDoctrine()->getRepository('MadefComptaBundle:AccountLine')
-                ->getTypeList();
+        $typeList = $this->getDoctrine()->getRepository('MadefComptaBundle:Type')
+                ->getList();
+
+        $companyList = $this->getDoctrine()->getRepository('MadefComptaBundle:Company')
+                ->getList();
 
         return new Response($this->renderView('MadefComptaBundle:AccountLine:add.html.twig', array(
                     'section' => 'add',
@@ -194,6 +205,7 @@ class AccountLineController extends Controller
                     'errors' => $errors,
                     'hasErrors' => (bool) count($errors),
                     'typeList' => json_encode($typeList),
+                    'companyList' => json_encode($companyList),
         )));
     }
 
@@ -229,12 +241,47 @@ class AccountLineController extends Controller
         $accountLine->setTaxRate($request->get('taxRate'));
         $accountLine->setValueTaxInclude($request->get('valueTaxInclude'));
         $accountLine->setValueTaxExclude($request->get('valueTaxExclude'));
-        $accountLine->setType($request->get('type'));
 
-        if (is_null($request->get('flowDirection')) || !in_array($request->get('flowDirection'), array(\Madef\ComptaBundle\Entity\AccountLine::FLOW_DIRECTION_IN, \Madef\ComptaBundle\Entity\AccountLine::FLOW_DIRECTION_OUT))) {
-            $errors['flowDirection'] = $this->get('translator')->trans('flowdirection.required');
+        $type = $request->get('type');
+        if (empty($type)) {
+            $accountLine->setType(null);
         } else {
-            $accountLine->setFlowDirection($request->get('flowDirection'));
+            $repository = $this->getDoctrine()->getRepository('MadefComptaBundle:Type');
+            $typeObject = $repository->findOneByName($type);
+            if (is_null($typeObject)) {
+                $typeObject = new \Madef\ComptaBundle\Entity\Type();
+                $typeObject->setName($type);
+                $em->persist($typeObject);
+            }
+            $accountLine->setType($typeObject);
+        }
+
+        $receiver = $request->get('receiver');
+        if (empty($receiver)) {
+            $accountLine->setReceiver(null);
+        } else {
+            $repository = $this->getDoctrine()->getRepository('MadefComptaBundle:Company');
+            $receiverObject = $repository->findOneByName($receiver);
+            if (is_null($receiverObject)) {
+                $receiverObject = new \Madef\ComptaBundle\Entity\Company();
+                $receiverObject->setName($receiver);
+                $em->persist($receiverObject);
+            }
+            $accountLine->setReceiver($receiverObject);
+        }
+
+        $transmitter = $request->get('transmitter');
+        if (empty($transmitter)) {
+            $accountLine->setTransmitter(null);
+        } else {
+            $repository = $this->getDoctrine()->getRepository('MadefComptaBundle:Company');
+            $transmitterObject = $repository->findOneByName($transmitter);
+            if (is_null($transmitterObject)) {
+                $transmitterObject = new \Madef\ComptaBundle\Entity\Company();
+                $transmitterObject->setName($transmitter);
+                $em->persist($transmitterObject);
+            }
+            $accountLine->setTransmitter($transmitterObject);
         }
 
         if ($request->get('invoiceId') && $invoice = $em->find('\Madef\ComptaBundle\Entity\Invoice', $request->get('invoiceId'))) {

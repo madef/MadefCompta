@@ -21,12 +21,13 @@ account:
                 label:
                     date: Date
                     description: Description
-                    flowDirection: Direction of the flow
                     invoice: Invoice
+                    receiver: Receiver
                     remove: Remove
                     save: Save
                     taxRate: Tax rate
                     taxValue: Tax value
+                    transmitter: Transmitter
                     type: Type
                     valueTaxExclude: Value te
                     valueTaxInclude: Value ti
@@ -35,7 +36,8 @@ account:
             form:
                 label:
                     filter: 'Filter:'
-                    flowDirection: Direction
+                    receiver: Receiver
+                    transmitter: Transmitter
                     type: Type
             table:
                 column:
@@ -78,9 +80,6 @@ date:
 # File section
 file:
     unavailableFormat: Unsupported file format.
-# Flow direction section
-flowdirection:
-    required: The flow is required.
 # Invoice section
 invoice:
     modified: Invoice modified.
@@ -102,11 +101,12 @@ invoice:
                     date: Date
                     description: Description
                     file: File
-                    flowDirection: Direction of the flow
+                    receiver: Receiver
                     remove: Remove
                     save: Save
                     taxRate: Tax rate
                     taxValue: Tax value
+                    transmitter: Transmitter
                     type: Type
                     valueTaxExclude: Value TE
                     valueTaxInclude: Value TI
@@ -115,7 +115,8 @@ invoice:
             form:
                 label:
                     filter: 'Filter:'
-                    flowDirection: Direction
+                    receiver: Receiver
+                    transmitter: Transmitter
                     type: Type
             table:
                 column:

@@ -21,6 +21,24 @@
                 {% if 'description' in errors|keys  %}<span class="help-inline">{{ errors.description }}</span>{% endif %}
             </div>
         </div>
+        <div class="control-group">
+            <label class="control-label" for="type">{% trans %}invoice.page.edit.form.label.type{% endtrans %}</label>
+            <div class="controls">
+                <input data-provide="typeahead" type="text" autocomplete="off" id="type" name="type" value="{% if invoice.getType() %}{{ invoice.getType().getName() }}{% endif %}" data-source="{{ typeList }}">
+            </div>
+        </div>
+        <div class="control-group">
+            <label class="control-label" for="transmitter">{% trans %}invoice.page.edit.form.label.transmitter{% endtrans %}</label>
+            <div class="controls">
+                <input data-provide="typeahead" type="text" autocomplete="off" id="transmitter" name="transmitter" value="{% if invoice.getTransmitter() %}{{ invoice.getTransmitter().getName() }}{% endif %}" data-source="{{ companyList }}">
+            </div>
+        </div>
+        <div class="control-group">
+            <label class="control-label" for="receiver">{% trans %}invoice.page.edit.form.label.receiver{% endtrans %}</label>
+            <div class="controls">
+                <input data-provide="typeahead" type="text" autocomplete="off" id="receiver" name="receiver" value="{% if invoice.getReceiver() %}{{ invoice.getReceiver().getName() }}{% endif %}" data-source="{{ companyList }}">
+            </div>
+        </div>
         <div class="control-group {% if 'date' in errors|keys  %}error{% endif %}">
             <label class="control-label" for="email">{% trans %}invoice.page.edit.form.label.date{% endtrans %}</label>
             <div class="controls">
@@ -50,26 +68,6 @@
             <label class="control-label" for="valueTaxInclude">{% trans %}invoice.page.edit.form.label.valueTaxInclude{% endtrans %}</label>
             <div class="controls">
                 <input type="text" id="valueTaxInclude" name="valueTaxInclude" value="{{ invoice.getValueTaxInclude() }}">
-            </div>
-        </div>
-        <div class="control-group {% if 'flowDirection' in errors|keys  %}error{% endif %}">
-            <label class="control-label" for="flowDirection">{% trans %}invoice.page.edit.form.label.flowDirection{% endtrans %}</label>
-            <div class="controls">
-                <label class="radio inline">
-                    <input type="radio" name="flowDirection" id="flowDirection_in" value="{{ constant('Madef\\ComptaBundle\\Entity\\Invoice::FLOW_DIRECTION_IN') }}" {% if invoice.isIn() %}checked{% endif %}>
-                    {% trans %}invoice.page.edit.form.fieldValue.in{% endtrans %}
-                </label>
-                <label class="radio inline">
-                    <input type="radio" name="flowDirection" id="flowDirection_out" value="{{ constant('Madef\\ComptaBundle\\Entity\\Invoice::FLOW_DIRECTION_OUT') }}" {% if invoice.isOut() %}checked{% endif %}>
-                    {% trans %}invoice.page.edit.form.fieldValue.out{% endtrans %}
-                </label>
-                {% if 'flowDirection' in errors|keys  %}<div class="radio inline"><span class="help-inline">{{ errors.flowDirection }}</span></div>{% endif %}
-            </div>
-        </div>
-        <div class="control-group">
-            <label class="control-label" for="type">{% trans %}invoice.page.edit.form.label.type{% endtrans %}</label>
-            <div class="controls">
-                <input data-provide="typeahead" type="text" autocomplete="off"id="type" name="type" value="{{ invoice.getType() }}" data-source="{{ typeList }}">
             </div>
         </div>
         <div class="control-group {% if 'file' in errors|keys  %}error{% endif %}">

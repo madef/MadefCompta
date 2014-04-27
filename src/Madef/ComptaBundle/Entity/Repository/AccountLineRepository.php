@@ -39,7 +39,7 @@ class AccountLineRepository extends EntityRepository
      * @param  \DateTime $endDate
      * @return type
      */
-    public function findByDate(\DateTime $startDate, \DateTime $endDate, $type = "", $flowDirection = "")
+    public function findByDate(\DateTime $startDate, \DateTime $endDate, $type = "", $transmitter = "", $receiver = "")
     {
         // First get the EM handle
         // and call the query builder on it
@@ -53,17 +53,30 @@ class AccountLineRepository extends EntityRepository
                 ->setParameter('endDate', $endDate->format('Y-m-d'));
 
         if (!empty($type)) {
+            $repository = $this->_em->getRepository('MadefComptaBundle:Type');
+            $typeObject = $repository->findOneByName($type);
+
             $query
                     ->andWhere('r.type = :type')
-                    ->setParameter('type', $type);
+                    ->setParameter('type', $typeObject);
         }
 
-        if (!empty($flowDirection)) {
-            if ($flowDirection == 'in') {
-                $query->andWhere('r.valueTaxInclude > 0');
-            } else {
-                $query->andWhere('r.valueTaxInclude < 0');
-            }
+        if (!empty($transmitter)) {
+            $repository = $this->_em->getRepository('MadefComptaBundle:Company');
+            $transmitterObject = $repository->findOneByName($transmitter);
+
+            $query
+                    ->andWhere('r.transmitter = :transmitter')
+                    ->setParameter('transmitter', $transmitterObject);
+        }
+
+        if (!empty($receiver)) {
+            $repository = $this->_em->getRepository('MadefComptaBundle:Company');
+            $receiverObject = $repository->findOneByName($receiver);
+
+            $query
+                    ->andWhere('r.receiver = :receiver')
+                    ->setParameter('receiver', $receiverObject);
         }
 
         return $qb->getQuery()->getResult();

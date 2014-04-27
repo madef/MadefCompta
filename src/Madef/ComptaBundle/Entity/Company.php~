@@ -26,26 +26,59 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-namespace Madef\ComptaBundle\Controller;
+namespace Madef\ComptaBundle\Entity;
 
-use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Doctrine\ORM\Mapping as ORM;
 
-class LanguageController extends Controller
+/**
+ * @ORM\Entity(repositoryClass="Madef\ComptaBundle\Entity\Repository\CompanyRepository")
+ * @ORM\Table(name="company")
+ */
+class Company
 {
     /**
-     *
-     * @param  \Symfony\Component\HttpFoundation\Request  $request
-     * @return \Symfony\Component\HttpFoundation\Response
+     * @ORM\Column(type="integer")
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="AUTO")
      */
-    public function routeAction(Request $request)
-    {
-        $language = $request->getPreferredLanguage();
-        if (empty($language)) {
-            $language = 'en';
-        }
+    private $id;
 
-        return $this->redirect($this->generateUrl('madef_compta_accountline_list', array('_locale' => $language)));
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true, unique=true)
+     * @var string
+     */
+    private $name;
+
+    /**
+     * Get id
+     *
+     * @return integer
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    /**
+     * Set name
+     *
+     * @param string $name
+     * @return Type
+     */
+    public function setName($name)
+    {
+        $this->name = $name;
+
+        return $this;
+    }
+
+    /**
+     * Get name
+     *
+     * @return string
+     */
+    public function getName()
+    {
+        return $this->name;
     }
 }

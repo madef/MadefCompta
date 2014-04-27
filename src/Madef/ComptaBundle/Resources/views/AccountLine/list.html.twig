@@ -18,10 +18,16 @@
                     <option value="{{ type }}" {% if currentType == type %}selected{% endif %}>{{ type }}</option>
                 {% endfor %}
             </select>
-            <select id="flowDirection" name="flowDirection" onchange="$(this).parent().submit();">
-                <option value="">{% trans %}account.page.list.form.label.flowDirection{% endtrans %}</option>
-                {% for key, flowDirection in flowDirectionList %}
-                    <option value="{{ key }}" {% if currentFlowDirection == key %}selected{% endif %}>{{ flowDirection }}</option>
+            <select id="transmitter" name="transmitter" onchange="$(this).parent().submit();">
+                <option value="">{% trans %}account.page.list.form.label.transmitter{% endtrans %}</option>
+                {% for company in companyList %}
+                    <option value="{{ company }}" {% if currentTransmitter == company %}selected{% endif %}>{{ company }}</option>
+                {% endfor %}
+            </select>
+            <select id="receiver" name="receiver" onchange="$(this).parent().submit();">
+                <option value="">{% trans %}account.page.list.form.label.receiver{% endtrans %}</option>
+                {% for company in companyList %}
+                    <option value="{{ company }}" {% if currentReceiver == company %}selected{% endif %}>{{ company }}</option>
                 {% endfor %}
             </select>
         </form>

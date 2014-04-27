@@ -71,13 +71,16 @@ class InvoiceController extends Controller
 
         // Get the resa list
         $invoiceCollection = $this->getDoctrine()->getRepository('\Madef\ComptaBundle\Entity\Invoice')
-                ->findByDate($startDate, $endDate, $request->get('type'), $request->get('flowDirection'));
+                ->findByDate($startDate, $endDate, $request->get('type'), $request->get('transmitter'), $request->get('receiver'));
 
         $total = $this->getDoctrine()->getRepository('\Madef\ComptaBundle\Entity\Invoice')
-                ->getTotal($startDate, $endDate, $request->get('type'), $request->get('flowDirection'));
+                ->getTotal($startDate, $endDate, $request->get('type'));
 
-        $typeList = $this->getDoctrine()->getRepository('\Madef\ComptaBundle\Entity\Invoice')
-                ->getTypeList();
+        $typeList = $this->getDoctrine()->getRepository('MadefComptaBundle:Type')
+                ->getList();
+
+        $companyList = $this->getDoctrine()->getRepository('MadefComptaBundle:Company')
+                ->getList();
 
         return new Response($this->renderView('MadefComptaBundle:Invoice:list.html.twig', array(
             'startDate' => $startDate->format('j M. Y'),
@@ -93,8 +96,9 @@ class InvoiceController extends Controller
             'successMessage' => $session->getFlashBag()->get('successMessage'),
             'typeList' => $typeList,
             'currentType' => $request->get('type'),
-            'flowDirectionList' => array('in' => 'Émises', 'out' => 'Reçues'),
-            'currentFlowDirection' => $request->get('flowDirection'),
+            'companyList' => $companyList,
+            'currentTransmitter' => $request->get('transmitter'),
+            'currentReceiver' => $request->get('receiver')
         )));
     }
 
@@ -117,8 +121,11 @@ class InvoiceController extends Controller
             $session->remove('errors');
         }
 
-        $typeList = $this->getDoctrine()->getRepository('\Madef\ComptaBundle\Entity\Invoice')
-                ->getTypeList();
+        $typeList = $this->getDoctrine()->getRepository('MadefComptaBundle:Type')
+                ->getList();
+
+        $companyList = $this->getDoctrine()->getRepository('MadefComptaBundle:Company')
+                ->getList();
 
         return new Response($this->renderView('MadefComptaBundle:Invoice:edit.html.twig', array(
                     'section' => 'edit',
@@ -126,6 +133,7 @@ class InvoiceController extends Controller
                     'errors' => $errors,
                     'hasErrors' => (bool) count($errors),
                     'typeList' => json_encode($typeList),
+                    'companyList' => json_encode($companyList),
         )));
     }
 
@@ -148,8 +156,11 @@ class InvoiceController extends Controller
             $session->remove('errors');
         }
 
-        $typeList = $this->getDoctrine()->getRepository('\Madef\ComptaBundle\Entity\Invoice')
-                ->getTypeList();
+        $typeList = $this->getDoctrine()->getRepository('MadefComptaBundle:Type')
+                ->getList();
+
+        $companyList = $this->getDoctrine()->getRepository('MadefComptaBundle:Company')
+                ->getList();
 
         return new Response($this->renderView('MadefComptaBundle:Invoice:add.html.twig', array(
                     'section' => 'addInvoice',
@@ -157,6 +168,7 @@ class InvoiceController extends Controller
                     'errors' => $errors,
                     'hasErrors' => (bool) count($errors),
                     'typeList' => json_encode($typeList),
+                    'companyList' => json_encode($companyList),
         )));
     }
 
@@ -193,21 +205,23 @@ class InvoiceController extends Controller
     {
         // Get the resa list
         $invoiceCollection = $this->getDoctrine()->getRepository('\Madef\ComptaBundle\Entity\Invoice')
-                ->findByDate($startDate, $endDate, $request->get('type'), $request->get('flowDirection'));
+                ->findByDate($startDate, $endDate, $request->get('type'), $request->get('transmitter'), $request->get('receiver'));
 
         $zip = new \ZipArchive();
 
         $suffix = '';
-        if ($request->get('type') || $request->get('flowDirection')) {
-            if ($request->get('type')) {
-                $suffix .= '_' . $request->get('type');
-            }
-            if ($request->get('flowDirection') == 'in') {
-                $suffix .= '_émises';
-            } elseif ($request->get('flowDirection') == 'out') {
-                $suffix .= '_reçues';
-            }
+        if ($request->get('type')) {
+            $suffix .= '_' . $request->get('type');
         }
+
+        if ($request->get('transmitter')) {
+            $suffix .= '_from-' . $request->get('transmitter');
+        }
+
+        if ($request->get('receiver')) {
+            $suffix .= '_to-' . $request->get('receiver');
+        }
+
         $filename = "Invoice-{$startDate->format('Y-m-d')}_{$endDate->format('Y-m-d')}{$suffix}.zip";
         $path = sys_get_temp_dir() . "/Invoice-{$startDate->format('Y-m-d')}_{$endDate->format('Y-m-d')}.zip";
         if ($zip->open($path, \ZIPARCHIVE::OVERWRITE) !== TRUE) {
@@ -261,12 +275,6 @@ class InvoiceController extends Controller
         $invoice->setTaxRate($request->get('taxRate'));
         $invoice->setValueTaxInclude($request->get('valueTaxInclude'));
         $invoice->setValueTaxExclude($request->get('valueTaxExclude'));
-
-        if (is_null($request->get('flowDirection')) || !in_array($request->get('flowDirection'), array(\Madef\ComptaBundle\Entity\Invoice::FLOW_DIRECTION_IN, \Madef\ComptaBundle\Entity\Invoice::FLOW_DIRECTION_OUT))) {
-            $errors['flowDirection'] = $this->get('translator')->trans('flowdirection.required');
-        } else {
-            $invoice->setFlowDirection($request->get('flowDirection'));
-        }
 
         $invoice->setType($request->get('type'));
 

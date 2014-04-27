@@ -31,11 +31,14 @@ namespace Madef\ComptaBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * @ORM\Entity(repositoryClass="Madef\ComptaBundle\Entity\Repository\AccountLineRepository")
- * @ORM\Table(name="account_line")
+ * @ORM\Entity(repositoryClass="Madef\ComptaBundle\Entity\Repository\InvoiceRepository")
+ * @ORM\Table(name="invoice")
  */
-class AccountLine
+class Invoice
 {
+
+    const FLOW_DIRECTION_IN = 0;
+    const FLOW_DIRECTION_OUT = 1;
 
     /**
      * @ORM\Column(type="integer")
@@ -93,13 +96,17 @@ class AccountLine
      * @var string
      */
     private $receiver;
+    /**
+     * @ORM\Column(type="string", nullable=true)
+     * @var string
+     */
+    private $filename;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Invoice", inversedBy="accountLines")
-     * @ORM\JoinColumn(name="invoice_id", referencedColumnName="id")
-     * @var Invoice
+     * @ORM\Column(type="string", nullable=true)
+     * @var string
      */
-    private $invoice;
+    private $filetype;
 
     /**
      * @ORM\ManyToOne(targetEntity="Type")
@@ -107,6 +114,18 @@ class AccountLine
      * @var string
      */
     private $type;
+
+    /**
+     * @ORM\Column(type="boolean", nullable=false)
+     * @var bool
+     */
+    private $flowDirection;
+
+    /*
+     * @ORM\OneToMany(targetEntity="AccountLine", mappedBy="invoice")
+     * @var AccountLines
+     */
+    private $accountLines;
 
     public function __construct()
     {
@@ -163,7 +182,7 @@ class AccountLine
      * Set id
      *
      * @param  id
-     * @return AccountLine
+     * @return Invoice
      */
     public function setId($id)
     {
@@ -186,7 +205,7 @@ class AccountLine
      * Set valueTaxInclude
      *
      * @param float valueTaxInclude
-     * @return AccountLine
+     * @return Invoice
      */
     public function setValueTaxInclude($valueTaxInclude)
     {
@@ -209,7 +228,7 @@ class AccountLine
      * Set valueTaxExclude
      *
      * @param float valueTaxExclude
-     * @return AccountLine
+     * @return Invoice
      */
     public function setValueTaxExclude($valueTaxExclude)
     {
@@ -232,7 +251,7 @@ class AccountLine
      * Set taxValue
      *
      * @param float taxValue
-     * @return AccountLine
+     * @return Invoice
      */
     public function setTaxValue($taxValue)
     {
@@ -255,7 +274,7 @@ class AccountLine
      * Set taxRate
      *
      * @param float taxRate
-     * @return AccountLine
+     * @return Invoice
      */
     public function setTaxRate($taxRate)
     {
@@ -278,7 +297,7 @@ class AccountLine
      * Set description
      *
      * @param string description
-     * @return AccountLine
+     * @return Invoice
      */
     public function setDescription($description)
     {
@@ -288,43 +307,10 @@ class AccountLine
     }
 
     /**
-     * Get transmitter
-     *
-     * @return string
-     */
-    public function getTransmitter()
-    {
-        return $this->transmitter;
-    }
-
-    /**
-     * Set transmitter
-     *
-     * @param string transmitter
-     * @return Invoice
-     */
-    public function setTransmitter($transmitter)
-    {
-        $this->transmitter = $transmitter;
-
-        return $this;
-    }
-
-    /**
-     * Get receiver
-     *
-     * @return string
-     */
-    public function getReceiver()
-    {
-        return $this->receiver;
-    }
-
-    /**
      * Set receiver
      *
-     * @param  string      $receiver
-     * @return AccountLine
+     * @param string receiver
+     * @return Invoice
      */
     public function setReceiver($receiver)
     {
@@ -334,26 +320,46 @@ class AccountLine
     }
 
     /**
-     * Get invoice
+     * Get filename
      *
-     * @return Invoice
+     * @param bool Full path
+     * @return string
      */
-    public function getInvoice()
+    public function getFilename($fullpath = false)
     {
-        return $this->invoice;
+        $directory = '';
+        if ($fullpath) {
+            $directory = realpath(__DIR__ . '/../Resources/download/invoice') . '/';
+        }
+
+        return $directory . $this->filename;
     }
 
     /**
-     * Set invoice
+     * Set filename
      *
-     * @param Invoice invoice
-     * @return AccountLine
+     * @param string filename
+     * @return Invoice
      */
-    public function setInvoice($invoice)
+    public function setFilename($filename)
     {
-        $this->invoice = $invoice;
+        $this->filename = $filename;
 
         return $this;
+    }
+
+    /**
+     * Has filename
+     *
+     * @return bool
+     */
+    public function hasFilename()
+    {
+        if (!$this->getFilename()) {
+            return false;
+        }
+
+        return true;
     }
 
     /**
@@ -370,12 +376,120 @@ class AccountLine
      * Set type
      *
      * @param string type
-     * @return AccountLine
+     * @return Invoice
      */
     public function setType($type)
     {
         $this->type = $type;
 
         return $this;
+    }
+
+    /**
+     * Get flowDirection
+     *
+     * @return bool
+     */
+    public function getFlowDirection()
+    {
+        return $this->flowDirection;
+    }
+
+    /**
+     * Set flowDirection
+     *
+     * @param bool flowDirection
+     * @return Invoice
+     */
+    public function setFlowDirection($flowDirection)
+    {
+        $this->flowDirection = $flowDirection;
+
+        return $this;
+    }
+
+    public function isIn()
+    {
+        if (is_null($this->getFlowDirection()) || $this->getFlowDirection() != self::FLOW_DIRECTION_IN) {
+            return false;
+        }
+
+        return true;
+    }
+
+    public function isOut()
+    {
+        if (is_null($this->getFlowDirection()) || $this->getFlowDirection() != self::FLOW_DIRECTION_OUT) {
+            return false;
+        }
+
+        return true;
+    }
+
+    /**
+     * Get filetype
+     *
+     * @return string
+     */
+    public function getFiletype()
+    {
+        return $this->filetype;
+    }
+
+    /**
+     * Set filetype
+     *
+     * @param string filetype
+     * @return Invoice
+     */
+    public function setFiletype($filetype)
+    {
+        $this->filetype = $filetype;
+
+        return $this;
+    }
+
+    /**
+     * Get formated filename
+     *
+     * @return String
+     */
+    public function getFormatedFilename()
+    {
+        return $this->getDate('Y-m-d') . '-' . str_replace(' ', '_', $this->getDescription()) . '.' . $this->getFiletype();
+    }
+
+
+    /**
+     * Set transmitter
+     *
+     * @param string $transmitter
+     * @return Invoice
+     */
+    public function setTransmitter($transmitter)
+    {
+        $this->transmitter = $transmitter;
+
+        return $this;
+    }
+
+    /**
+     * Get transmitter
+     *
+     * @return string
+     */
+    public function getTransmitter()
+    {
+        return $this->transmitter;
+    }
+
+    /**
+     * Get receiver
+     *
+     * @return string
+     */
+    public function getReceiver()
+    {
+        return $this->receiver;
     }
 }

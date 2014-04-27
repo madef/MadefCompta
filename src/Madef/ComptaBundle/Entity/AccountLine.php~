@@ -37,6 +37,9 @@ use Doctrine\ORM\Mapping as ORM;
 class AccountLine
 {
 
+    const FLOW_DIRECTION_IN = 0;
+    const FLOW_DIRECTION_OUT = 1;
+
     /**
      * @ORM\Column(type="integer")
      * @ORM\Id
@@ -107,6 +110,12 @@ class AccountLine
      * @var string
      */
     private $type;
+
+    /**
+     * @ORM\Column(type="boolean", nullable=false)
+     * @var bool
+     */
+    private $flowDirection;
 
     public function __construct()
     {
@@ -323,7 +332,7 @@ class AccountLine
     /**
      * Set receiver
      *
-     * @param  string      $receiver
+     * @param string $receiver
      * @return AccountLine
      */
     public function setReceiver($receiver)
@@ -378,4 +387,46 @@ class AccountLine
 
         return $this;
     }
+
+    /**
+     * Get flowDirection
+     *
+     * @return bool
+     */
+    public function getFlowDirection()
+    {
+        return $this->flowDirection;
+    }
+
+    /**
+     * Set flowDirection
+     *
+     * @param bool flowDirection
+     * @return AccountLine
+     */
+    public function setFlowDirection($flowDirection)
+    {
+        $this->flowDirection = $flowDirection;
+
+        return $this;
+    }
+
+    public function isIn()
+    {
+        if (is_null($this->getFlowDirection()) || $this->getFlowDirection() != self::FLOW_DIRECTION_IN) {
+            return false;
+        }
+
+        return true;
+    }
+
+    public function isOut()
+    {
+        if (is_null($this->getFlowDirection()) || $this->getFlowDirection() != self::FLOW_DIRECTION_OUT) {
+            return false;
+        }
+
+        return true;
+    }
+
 }

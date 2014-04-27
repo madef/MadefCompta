@@ -26,26 +26,32 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-namespace Madef\ComptaBundle\Controller;
+namespace Madef\ComptaBundle\Entity\Repository;
 
-use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Doctrine\ORM\EntityRepository;
 
-class LanguageController extends Controller
+class TypeRepository extends EntityRepository
 {
     /**
-     *
-     * @param  \Symfony\Component\HttpFoundation\Request  $request
-     * @return \Symfony\Component\HttpFoundation\Response
+     * Get the list of types
+     * @return List of types
      */
-    public function routeAction(Request $request)
+    public function getList()
     {
-        $language = $request->getPreferredLanguage();
-        if (empty($language)) {
-            $language = 'en';
+        $qb = $this->_em->createQueryBuilder();
+        $qb->select('DISTINCT(t.name) as type')
+                ->from('Madef\ComptaBundle\Entity\Type', 't')
+                ->where('t.name IS NOT NULL')
+                ->andWhere('t.name <> :empty')
+                ->setParameter('empty', '') // There is a best way ?
+                ->orderBy('t.name');
+
+        $results = array();
+        foreach ($qb->getQuery()->getResult() as $row) {
+            $results [] = $row['type'];
         }
 
-        return $this->redirect($this->generateUrl('madef_compta_accountline_list', array('_locale' => $language)));
+        return $results;
     }
+
 }

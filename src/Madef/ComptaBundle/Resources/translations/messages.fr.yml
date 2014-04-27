@@ -21,12 +21,13 @@ account:
                 label:
                     date: Date
                     description: Description
-                    flowDirection: Sens du flux
                     invoice: Facture
+                    receiver: Destinataire
                     remove: Supprimer
                     save: Enregistrer
                     taxRate: Taux de TVA
                     taxValue: TVA
+                    transmitter: Emetteur
                     type: Type
                     valueTaxExclude: Valeur hors tax
                     valueTaxInclude: Valeur TTC
@@ -35,7 +36,8 @@ account:
             form:
                 label:
                     filter: 'Filtrer :'
-                    flowDirection: Sens
+                    receiver: Destinataire
+                    transmitter: Emetteur
                     type: Type
             table:
                 column:
@@ -78,9 +80,6 @@ date:
 # File section
 file:
     unavailableFormat: Format de fichier non supporté.
-# Flow direction section
-flowdirection:
-    required: Le sens du flux est requis.
 # Invoice section
 invoice:
     modified: Facture modifiée.
@@ -102,11 +101,12 @@ invoice:
                     date: Date
                     description: Description
                     file: Fichier
-                    flowDirection: Sens du flux
+                    receiver: Destinataire
                     remove: Supprimer
                     save: Enregistrer
                     taxRate: Taux de TVA
                     taxValue: TVA
+                    transmitter: Emetteur
                     type: Type
                     valueTaxExclude: Valeur hors tax
                     valueTaxInclude: Valeur TTC
@@ -115,7 +115,8 @@ invoice:
             form:
                 label:
                     filter: 'Filtrer :'
-                    flowDirection: Sens
+                    receiver: Destinataire
+                    transmitter: Emetteur
                     type: Type
             table:
                 column:
