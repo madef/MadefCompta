@@ -80,6 +80,7 @@ date:
 # File section
 file:
     unavailableFormat: Unsupported file format.
+    directoryNotWritable: The file cannot be uploaded.
 # Invoice section
 invoice:
     modified: Invoice modified.

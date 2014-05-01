@@ -256,8 +256,8 @@ class InvoiceController extends Controller
 
         $errors = array();
 
-        $em = $this->getDoctrine()->getEntityManager();
-        if ($id = $request->get('id')) {
+        $em = $this->getDoctrine()->getManager();
+        if ($id = $request->query->get('id')) {
             $invoice = $em->find('\Madef\ComptaBundle\Entity\Invoice', $id);
             if ($request->get('remove')) {
                 $em->remove($invoice);
@@ -276,16 +276,31 @@ class InvoiceController extends Controller
         $invoice->setValueTaxInclude($request->get('valueTaxInclude'));
         $invoice->setValueTaxExclude($request->get('valueTaxExclude'));
 
-        $invoice->setType($request->get('type'));
+        $type = $request->get('type');
+        if (empty($type)) {
+            $invoice->setType(null);
+        } else {
+            $repository = $this->getDoctrine()->getRepository('MadefComptaBundle:Type');
+            $typeObject = $repository->findOneByName($type);
+            if (is_null($typeObject)) {
+                $typeObject = new \Madef\ComptaBundle\Entity\Type();
+                $typeObject->setName($type);
+                $em->persist($typeObject);
+            }
+            $invoice->setType($typeObject);
+        }
 
-        if ($_FILES['file']['size']) {
+        if (!empty($_FILES['file']['name'])) {
             $filename = md5($_FILES['file']['name'] . rand(1, 1000000));
 
-            if (!preg_match('/\.(pdf|png|jpg|jpeg|gif|zip|tgz|tbz2|gz|bz2|ods|odt|csv|doc|docx)$/Usi', $_FILES['file']['name'])) {
+            if (!preg_match('/\.(pdf|png|jpg|jpeg|gif|zip|tgz|tbz2|gz|bz2|ods|odt|csv|doc|docx|xml)$/Usi', $_FILES['file']['name'])) {
                 $errors['file'] = $this->get('translator')->trans('file.unavailableFormat');
             } else {
                 $directory = realpath(__DIR__ . '/../Resources/download/invoice');
-                move_uploaded_file($_FILES['file']['tmp_name'], $directory . '/' . $filename);
+                $result = move_uploaded_file($_FILES['file']['tmp_name'], $directory . '/' . $filename);
+                if (!$result) {
+                    $errors['file'] = $this->get('translator')->trans('file.directoryNotWritable');
+                }
                 $invoice->setFilename($filename);
                 $invoice->setFiletype(strtolower(preg_replace('/^.*\.(.*)$/', '$1', $_FILES['file']['name'])));
             }
