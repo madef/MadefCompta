@@ -34,7 +34,7 @@ class AccountLineRepository extends EntityRepository
 {
 
     /**
-     * Get  account lines between two dates
+     * Get account lines between two dates
      * @param  \DateTime $startDate
      * @param  \DateTime $endDate
      * @return type

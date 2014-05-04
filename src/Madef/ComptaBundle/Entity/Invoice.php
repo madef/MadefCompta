@@ -29,6 +29,7 @@
 namespace Madef\ComptaBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\Common\Collections\ArrayCollection;
 
 /**
  * @ORM\Entity(repositoryClass="Madef\ComptaBundle\Entity\Repository\InvoiceRepository")
@@ -119,7 +120,7 @@ class Invoice
 
     public function __construct()
     {
-
+        $this->accountLines = new ArrayCollection();
     }
 
     public function __toString()
@@ -439,5 +440,28 @@ class Invoice
     public function getReceiver()
     {
         return $this->receiver;
+    }
+
+    /**
+     * Get account lines linked to the invoice
+     *
+     * @return ArrayCollection of account line
+     */
+    public function getAccountLines()
+    {
+        return $this->accountLines;
+    }
+
+    /**
+     * Set account lines
+     *
+     * @param  ArrayCollection $accountLines
+     * @return Invoice
+     */
+    public function setAccountLines(ArrayCollection $accountLines)
+    {
+        $this->accountLines = $accountLines;
+
+        return $this;
     }
 }

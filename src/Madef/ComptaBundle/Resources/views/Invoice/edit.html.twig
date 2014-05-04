@@ -79,6 +79,15 @@
         </div>
         <div class="control-group">
             <div class="controls">
+                <ul>
+                {% for accountLine in invoice.getAccountLines() %}
+                    <li><a href="{{ url('madef_compta_accountline_edit', {accountLine: accountLine.getId()}) }}">{{ accountLine.getDescription() }}</a></li>
+                {% endfor %}
+                </ul>
+            </div>
+        </div>
+        <div class="control-group">
+            <div class="controls">
                 {% if invoice.hasFilename() %}
                     <a class="btn btn" href="{{ url('madef_compta_invoice_download', {invoice: invoice.getId()}) }}"><i class=" icon-download-alt"></i></a>
                     {% endif %}

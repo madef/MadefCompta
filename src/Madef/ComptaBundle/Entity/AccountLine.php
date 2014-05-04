@@ -334,29 +334,6 @@ class AccountLine
     }
 
     /**
-     * Get invoice
-     *
-     * @return Invoice
-     */
-    public function getInvoice()
-    {
-        return $this->invoice;
-    }
-
-    /**
-     * Set invoice
-     *
-     * @param Invoice invoice
-     * @return AccountLine
-     */
-    public function setInvoice($invoice)
-    {
-        $this->invoice = $invoice;
-
-        return $this;
-    }
-
-    /**
      * Get type
      *
      * @return string
@@ -377,5 +354,28 @@ class AccountLine
         $this->type = $type;
 
         return $this;
+    }
+
+    /**
+     * Set invoice
+     *
+     * @param  \Madef\ComptaBundle\Entity\Invoice $invoice
+     * @return AccountLine
+     */
+    public function setInvoice(\Madef\ComptaBundle\Entity\Invoice $invoice = null)
+    {
+        $this->invoice = $invoice;
+
+        return $this;
+    }
+
+    /**
+     * Get invoice
+     *
+     * @return \Madef\ComptaBundle\Entity\Invoice
+     */
+    public function getInvoice()
+    {
+        return $this->invoice;
     }
 }
