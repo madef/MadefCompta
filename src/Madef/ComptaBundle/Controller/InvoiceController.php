@@ -263,7 +263,7 @@ class InvoiceController extends Controller
         $errors = array();
 
         $em = $this->getDoctrine()->getManager();
-        if ($id = $request->query->get('id')) {
+        if ($id = $request->get('id')) {
             $invoice = $em->find('\Madef\ComptaBundle\Entity\Invoice', $id);
             if ($request->get('remove')) {
                 $em->remove($invoice);
