@@ -296,6 +296,34 @@ class InvoiceController extends Controller
             $invoice->setType($typeObject);
         }
 
+        $receiver = $request->get('receiver');
+        if (empty($receiver)) {
+            $invoice->setReceiver(null);
+        } else {
+            $repository = $this->getDoctrine()->getRepository('MadefComptaBundle:Company');
+            $receiverObject = $repository->findOneByName($receiver);
+            if (is_null($receiverObject)) {
+                $receiverObject = new \Madef\ComptaBundle\Entity\Company();
+                $receiverObject->setName($receiver);
+                $em->persist($receiverObject);
+            }
+            $invoice->setReceiver($receiverObject);
+        }
+
+        $transmitter = $request->get('transmitter');
+        if (empty($transmitter)) {
+            $invoice->setTransmitter(null);
+        } else {
+            $repository = $this->getDoctrine()->getRepository('MadefComptaBundle:Company');
+            $transmitterObject = $repository->findOneByName($transmitter);
+            if (is_null($transmitterObject)) {
+                $transmitterObject = new \Madef\ComptaBundle\Entity\Company();
+                $transmitterObject->setName($transmitter);
+                $em->persist($transmitterObject);
+            }
+            $invoice->setTransmitter($transmitterObject);
+        }
+
         if (!empty($_FILES['file']['name'])) {
             $filename = md5($_FILES['file']['name'] . rand(1, 1000000));
 
