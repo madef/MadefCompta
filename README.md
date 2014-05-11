@@ -6,7 +6,7 @@ This project is for accounting of small french companies. I'm sure it can be use
 
 A demo is avalable [here] [1]
 
-Functionnalities
+Functionalities
 -----------
 
   - Account line
