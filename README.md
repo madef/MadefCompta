@@ -6,7 +6,7 @@ This project is for accounting of small french companies. I'm sure it can be use
 
 A demo is avalable [here] [1]
 
-Functionnalies
+Functionnalities
 -----------
 
   - Account line
@@ -63,8 +63,8 @@ php app/console doctrine:schema:update --force
 
 Allow the application to write in cache and log directories:
 ```sh
-chmod a+rw /home/www/deflotte/compta/app/logs/
-chmod a+rw /home/www/deflotte/compta/app/cache/
+chmod a+rw app/logs/
+chmod a+rw app/cache/
 ```
 
 
