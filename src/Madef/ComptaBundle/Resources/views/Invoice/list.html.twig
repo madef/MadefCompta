@@ -19,13 +19,13 @@
                 {% endfor %}
             </select>
             <select id="transmitter" name="transmitter" onchange="$(this).parent().submit();">
-                <option value="">{% trans %}account.page.list.form.label.transmitter{% endtrans %}</option>
+                <option value="">{% trans %}invoice.page.list.form.label.transmitter{% endtrans %}</option>
                 {% for company in companyList %}
                     <option value="{{ company }}" {% if currentTransmitter == company %}selected{% endif %}>{{ company }}</option>
                 {% endfor %}
             </select>
             <select id="receiver" name="receiver" onchange="$(this).parent().submit();">
-                <option value="">{% trans %}account.page.list.form.label.receiver{% endtrans %}</option>
+                <option value="">{% trans %}invoice.page.list.form.label.receiver{% endtrans %}</option>
                 {% for company in companyList %}
                     <option value="{{ company }}" {% if currentReceiver == company %}selected{% endif %}>{{ company }}</option>
                 {% endfor %}
@@ -43,12 +43,13 @@
     <table class="table table-striped table-hover table-bordered">
         <thead>
             <tr>
-                <th>{% trans %}account.page.list.table.column.title.description{% endtrans %}</th>
-                <th class="date-field">{% trans %}account.page.list.table.column.title.date{% endtrans %}</th>
+                <th>{% trans %}invoice.page.list.table.column.title.description{% endtrans %}</th>
+                <th class="date-field">{% trans %}invoice.page.list.table.column.title.date{% endtrans %}</th>
                 <th class="price-field text-right">{% trans %}invoice.page.list.table.column.title.taxRate{% endtrans %}</th>
                 <th class="price-field text-right">{% trans %}invoice.page.list.table.column.title.taxValue{% endtrans %}</th>
                 <th class="price-field text-right">{% trans %}invoice.page.list.table.column.title.valueTaxExclude{% endtrans %}</th>
                 <th class="price-field text-right">{% trans %}invoice.page.list.table.column.title.valueTaxInclude{% endtrans %}</th>
+                <th class="price-field text-right">{% trans %}invoice.page.list.table.column.title.restToPay{% endtrans %}</th>
                 <th class="action-field"></th>
             </tr>
         </thead>
@@ -61,21 +62,23 @@
                     <td class="text-right">{{ invoice.getTaxValue()|number_format(2, ',', '\'') }} €</td>
                     <td class="text-right">{{ invoice.getValueTaxExclude()|number_format(2, ',', '\'') }} €</td>
                     <td class="text-right">{{ invoice.getValueTaxInclude()|number_format(2, ',', '\'') }} €</td>
+                    <td class="text-right">{{ invoice.getRestToPay()|number_format(2, ',', '\'') }} €</td>
                     <td class="text-right">{% if invoice.hasFilename() %}<a href="{{ url('madef_compta_invoice_download', {invoice: invoice.getId()}) }}"><i class=" icon-download-alt"></i></a>{% endif %}</td>
                 </tr>
-                {% else %}
-                    <tr>
-                        <td colspan="7">{% trans %}account.page.list.table.line.title.noLines{% endtrans %}</td>
-                    </tr>
-                    {% endfor %}
-                        <tr class="resume">
-                            <th colspan="2">{% trans %}account.page.list.table.line.title.total{% endtrans %}</th>
-                            <td class="text-right">{{ totalTaxRate|number_format(2, ',', '\'') }} %</td>
-                            <td class="text-right">{{ totalTaxValue|number_format(2, ',', '\'') }} €</td>
-                            <td class="text-right">{{ totalTaxExclude|number_format(2, ',', '\'') }} €</td>
-                            <td class="text-right">{{ totalTaxInclude|number_format(2, ',', '\'') }} €</td>
-                            <td><a href="{{ url('madef_compta_invoice_downloadlist', {startDate: startDateRow, endDate: endDateRow}) }}?type={{ currentType }}&transmitter={{ currentTransmitter }}&receiver={{ currentReceiver }}"><i class=" icon-download-alt"></i></a></td>
-                        </tr>
-                    </tbody>
-                </table>
-                {% endblock %}
+            {% else %}
+                <tr>
+                    <td colspan="7">{% trans %}invoice.page.list.table.line.title.noLines{% endtrans %}</td>
+                </tr>
+            {% endfor %}
+            <tr class="resume">
+                    <th colspan="2">{% trans %}invoice.page.list.table.line.title.total{% endtrans %}</th>
+                    <td class="text-right">{{ totalTaxRate|number_format(2, ',', '\'') }} %</td>
+                    <td class="text-right">{{ totalTaxValue|number_format(2, ',', '\'') }} €</td>
+                    <td class="text-right">{{ totalTaxExclude|number_format(2, ',', '\'') }} €</td>
+                    <td class="text-right">{{ totalTaxInclude|number_format(2, ',', '\'') }} €</td>
+                    <td class="text-right"></td>
+                    <td><a href="{{ url('madef_compta_invoice_downloadlist', {startDate: startDateRow, endDate: endDateRow}) }}?type={{ currentType }}&transmitter={{ currentTransmitter }}&receiver={{ currentReceiver }}"><i class=" icon-download-alt"></i></a></td>
+            </tr>
+        </tbody>
+    </table>
+{% endblock %}

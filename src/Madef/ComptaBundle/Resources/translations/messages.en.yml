@@ -126,6 +126,7 @@ invoice:
                         description: Description
                         taxRate: Tax rate
                         taxValue: Tax value
+                        restToPay: Rest to pay
                         valueTaxExclude: TE
                         valueTaxInclude: TI
                 line:

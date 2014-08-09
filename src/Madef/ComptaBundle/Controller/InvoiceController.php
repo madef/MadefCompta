@@ -35,7 +35,6 @@ use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\HttpFoundation\ResponseHeaderBag;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
-use Doctrine\Common\Collections\ArrayCollection;
 
 class InvoiceController extends Controller
 {
@@ -127,11 +126,6 @@ class InvoiceController extends Controller
 
         $companyList = $this->getDoctrine()->getRepository('MadefComptaBundle:Company')
                 ->getList();
-
-        $repository = $this->getDoctrine()
-            ->getRepository('MadefComptaBundle:AccountLine');
-        $accountLines = new ArrayCollection($repository->findByInvoice($invoice));
-        $invoice->setAccountLines($accountLines);
 
         return new Response($this->renderView('MadefComptaBundle:Invoice:edit.html.twig', array(
                     'section' => 'edit',

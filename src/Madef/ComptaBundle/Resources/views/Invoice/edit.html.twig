@@ -77,15 +77,34 @@
                 {% if 'file' in errors|keys  %}<span class="help-inline">{{ errors.file }}</span>{% endif %}
             </div>
         </div>
+        {% if invoice.getAccountLines()|length %}
         <div class="control-group">
             <div class="controls">
-                <ul>
-                {% for accountLine in invoice.getAccountLines() %}
-                    <li><a href="{{ url('madef_compta_accountline_edit', {accountLine: accountLine.getId()}) }}">{{ accountLine.getDescription() }}</a></li>
-                {% endfor %}
-                </ul>
+                <table class="table table-striped table-hover table-bordered">
+                    <thead>
+                        <tr>
+                            <th>{% trans %}account.page.list.table.column.title.description{% endtrans %}</th>
+                            <th class="date-field">{% trans %}account.page.list.table.column.title.date{% endtrans %}</th>
+                            <th class="price-field text-right">{% trans %}account.page.list.table.column.title.taxValue{% endtrans %}</th>
+                            <th class="price-field text-right">{% trans %}account.page.list.table.column.title.valueTaxExclude{% endtrans %}</th>
+                            <th class="price-field text-right">{% trans %}account.page.list.table.column.title.valueTaxInclude{% endtrans %}</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for accountLine in invoice.getAccountLines() %}
+                            <tr>
+                                <td><a href="{{ url('madef_compta_accountline_edit', {accountLine: accountLine.getId()}) }}">{{ accountLine.getDescription() }}</a></td>
+                                <td>{{ accountLine.getDate("Y-m-d") }}</td>
+                                <td>{{ accountLine.getTaxValue() }}</td>
+                                <td>{{ accountLine.getValueTaxExclude() }}</td>
+                                <td>{{ accountLine.getValueTaxInclude() }}</td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
             </div>
         </div>
+        {% endif %}
         <div class="control-group">
             <div class="controls">
                 {% if invoice.hasFilename() %}

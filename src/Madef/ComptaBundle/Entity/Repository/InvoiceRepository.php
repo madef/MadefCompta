@@ -93,7 +93,9 @@ class InvoiceRepository extends EntityRepository
         // First get the EM handle
         // and call the query builder on it
         $qb = $this->_em->createQueryBuilder();
-        $query = $qb->select('sum(r.valueTaxInclude) as totalTaxInclude, sum(r.valueTaxExclude) as totalTaxExclude, sum(r.taxValue) as taxTotal')
+        $query = $qb->select('sum(r.valueTaxInclude) as totalTaxInclude,'
+                . 'sum(r.valueTaxExclude) as totalTaxExclude,'
+                . 'sum(r.taxValue) as taxTotal')
                 ->from('Madef\ComptaBundle\Entity\Invoice', 'r')
                 ->where('r.date >= :startDate')
                 ->andWhere('r.date <= :endDate')

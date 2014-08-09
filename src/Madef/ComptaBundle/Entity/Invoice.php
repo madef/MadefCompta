@@ -112,7 +112,7 @@ class Invoice
      */
     private $type;
 
-    /*
+    /**
      * @ORM\OneToMany(targetEntity="AccountLine", mappedBy="invoice")
      * @var AccountLines
      */
@@ -463,5 +463,60 @@ class Invoice
         $this->accountLines = $accountLines;
 
         return $this;
+    }
+
+    /**
+     * Add accountLines
+     *
+     * @param \Madef\ComptaBundle\Entity\AccountLine $accountLines
+     * @return Invoice
+     */
+    public function addAccountLine(\Madef\ComptaBundle\Entity\AccountLine $accountLines)
+    {
+        $this->accountLines[] = $accountLines;
+
+        return $this;
+    }
+
+    /**
+     * Remove accountLines
+     *
+     * @param \Madef\ComptaBundle\Entity\AccountLine $accountLines
+     */
+    public function removeAccountLine(\Madef\ComptaBundle\Entity\AccountLine $accountLines)
+    {
+        $this->accountLines->removeElement($accountLines);
+    }
+
+    /**
+     * Get rest tax include to pay
+     *
+     * @return Float
+     */
+    public function getRestToPay()
+    {
+        $total = 0;
+
+        foreach ($this->getAccountLines() as $accountLine) {
+            $total += $accountLine->getValueTaxInclude();
+        }
+
+        return $this->getValueTaxInclude() - $total;
+    }
+
+    /**
+     * Get total tax include payed
+     *
+     * @return Float
+     */
+    public function getTotalPayed()
+    {
+        $total = 0;
+
+        foreach ($this->getAccountLines() as $accountLine) {
+            $total += $accountLine->getValueTaxInclude();
+        }
+
+        return $total;
     }
 }

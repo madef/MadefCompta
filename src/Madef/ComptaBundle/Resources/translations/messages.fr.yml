@@ -126,6 +126,7 @@ invoice:
                         description: Description
                         taxRate: Taux de TVA
                         taxValue: TVA
+                        restToPay: Reste à payer
                         valueTaxExclude: HT
                         valueTaxInclude: TTC
                 line:
