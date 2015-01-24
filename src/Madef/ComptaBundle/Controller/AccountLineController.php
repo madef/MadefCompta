@@ -76,11 +76,11 @@ class AccountLineController extends Controller
                 ->findByDate($startDate, $endDate, $request->get('type'), $request->get('transmitter'), $request->get('receiver'));
 
         $solde = $this->getDoctrine()->getRepository('MadefComptaBundle:AccountLine')
-                ->getTotal($startDate, false, $request->get('type'));
+                ->getTotal($startDate, false, $request->get('type'), $request->get('transmitter'), $request->get('receiver'));
         $total = $this->getDoctrine()->getRepository('MadefComptaBundle:AccountLine')
-                ->getTotal($endDate, true, $request->get('type'));
+                ->getTotal($endDate, true, $request->get('type'), $request->get('transmitter'), $request->get('receiver'));
         $range = $this->getDoctrine()->getRepository('MadefComptaBundle:AccountLine')
-                ->getRangeTotal($startDate, $endDate, $request->get('type'));
+                ->getRangeTotal($startDate, $endDate, $request->get('type'), $request->get('transmitter'), $request->get('receiver'));
 
         $format = '.html';
         if ($request->get('format') === 'csv') {

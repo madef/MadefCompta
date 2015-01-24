@@ -104,16 +104,30 @@ class InvoiceRepository extends EntityRepository
                 ->setParameter('endDate', $endDate->format('Y-m-d'));
 
         if (!empty($type)) {
+            $repository = $this->_em->getRepository('MadefComptaBundle:Type');
+            $typeObject = $repository->findOneByName($type);
+
             $query
                     ->andWhere('r.type = :type')
-                    ->setParameter('type', $type);
+                    ->setParameter('type', $typeObject);
         }
 
-        if (!empty($flowDirection)) {
-            $constDirection = '\Madef\ComptaBundle\Entity\Invoice::FLOW_DIRECTION_' . strtoupper($flowDirection);
+        if (!empty($transmitter)) {
+            $repository = $this->_em->getRepository('MadefComptaBundle:Company');
+            $transmitterObject = $repository->findOneByName($transmitter);
+
             $query
-                    ->andWhere('r.flowDirection = :flowDirection')
-                    ->setParameter('flowDirection', constant($constDirection));
+                    ->andWhere('r.transmitter = :transmitter')
+                    ->setParameter('transmitter', $transmitterObject);
+        }
+
+        if (!empty($receiver)) {
+            $repository = $this->_em->getRepository('MadefComptaBundle:Company');
+            $receiverObject = $repository->findOneByName($receiver);
+
+            $query
+                    ->andWhere('r.receiver = :receiver')
+                    ->setParameter('receiver', $receiverObject);
         }
 
         return $qb->getQuery()->getSingleResult();
