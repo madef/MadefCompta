@@ -88,7 +88,7 @@ class InvoiceRepository extends EntityRepository
      * @param  \DateTime $endDate
      * @return type
      */
-    public function getTotal(\DateTime $startDate, \DateTime $endDate, $type = "", $flowDirection = "")
+    public function getTotal(\DateTime $startDate, \DateTime $endDate, $type = "", $transmitter = "", $receiver = "")
     {
         // First get the EM handle
         // and call the query builder on it

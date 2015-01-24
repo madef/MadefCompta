@@ -74,7 +74,7 @@ class InvoiceController extends Controller
                 ->findByDate($startDate, $endDate, $request->get('type'), $request->get('transmitter'), $request->get('receiver'));
 
         $total = $this->getDoctrine()->getRepository('\Madef\ComptaBundle\Entity\Invoice')
-                ->getTotal($startDate, $endDate, $request->get('type'));
+                ->getTotal($startDate, $endDate, $request->get('type'), $request->get('transmitter'), $request->get('receiver'));
 
         $typeList = $this->getDoctrine()->getRepository('MadefComptaBundle:Type')
                 ->getList();
