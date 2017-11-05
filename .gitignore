@@ -10,5 +10,6 @@
 /vendor/
 /bin/
 /composer.phar
+composer.lock
 *.*~
 /src/Madef/ComptaBundle/Resources/download/invoice/*
