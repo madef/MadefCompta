@@ -224,8 +224,10 @@ class InvoiceController extends Controller
 
         $filename = "Invoice-{$startDate->format('Y-m-d')}_{$endDate->format('Y-m-d')}{$suffix}.zip";
         $path = sys_get_temp_dir() . "/Invoice-{$startDate->format('Y-m-d')}_{$endDate->format('Y-m-d')}.zip";
-        if ($zip->open($path, \ZIPARCHIVE::OVERWRITE) !== TRUE) {
-            error_log('Error: Cannot create ZIP archive');
+        $path = tempnam(sys_get_temp_dir(), 'zip');
+        if (($error = $zip->open($path, \ZIPARCHIVE::OVERWRITE)) !== TRUE) {
+            error_log('Error: Cannot create ZIP archive "'.$path.'"');
+            error_log(var_export($error, true));
         }
 
         foreach ($invoiceCollection as $invoice) {

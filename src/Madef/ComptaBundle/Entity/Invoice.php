@@ -406,7 +406,10 @@ class Invoice
      */
     public function getFormatedFilename()
     {
-        return $this->getDate('Y-m-d') . '-' . str_replace(' ', '_', $this->getDescription()) . '.' . $this->getFiletype();
+        $description = $this->getDescription();
+        $description = strtr($description, 'ÁÀÂÄÃÅÇÉÈÊËÍÏÎÌÑÓÒÔÖÕÚÙÛÜÝ', 'AAAAAACEEEEEIIIINOOOOOUUUUY');
+        $description = strtr($description, 'áàâäãåçéèêëíìîïñóòôöõúùûüýÿ', 'aaaaaaceeeeiiiinooooouuuuyy');
+        return $this->getDate('Y-m-d') . '-' . str_replace(' ', '_', $description) . '.' . $this->getFiletype();
     }
 
     /**
